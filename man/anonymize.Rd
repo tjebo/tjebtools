@@ -2,7 +2,7 @@
 % Please edit documentation in R/tjebutils.R
 \name{anonymize}
 \alias{anonymize}
-\title{Extract MAIA raw data}
+\title{The function will anonymize your data}
 \usage{
 anonymize(df)
 }

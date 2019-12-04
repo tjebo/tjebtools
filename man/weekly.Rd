@@ -18,6 +18,6 @@ vector of dates. can be used in aggregations, e.g. with zoo.aggregate
 makes vector of dates of beginning of full (!) weeks
 }
 \author{
-tjebo - eclecticistic choice of functions, mainly with the help of SO::G.Grothendieck and SO::Joshua Ulrich
+tjebo - eclectic choice of functions, mainly with the help of SO::G.Grothendieck and SO::Joshua Ulrich
 https://stackoverflow.com/a/4351626/7941188 and https://stackoverflow.com/a/16193667/7941188
 }
