@@ -4,8 +4,13 @@
 \alias{krippen.alpha.raw}
 \title{Krippendorff's alpha coefficient}
 \usage{
-krippen.alpha.raw(ratings, weights = "unweighted", conflev = 0.95,
-  N = Inf, print = TRUE)
+krippen.alpha.raw(
+  ratings,
+  weights = "unweighted",
+  conflev = 0.95,
+  N = Inf,
+  print = TRUE
+)
 }
 \arguments{
 \item{ratings}{an \code{n x r} matrix of raw alphanumeric ratings from

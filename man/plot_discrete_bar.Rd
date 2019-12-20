@@ -4,12 +4,21 @@
 \alias{plot_discrete_bar}
 \title{plot_discrete_bar}
 \usage{
-plot_discrete_bar(breaks, palette = "Greys",
+plot_discrete_bar(
+  breaks,
+  palette = "Greys",
   colors = RColorBrewer::brewer.pal(length(breaks) - 1, palette),
-  direction = 1, spacing = "natural", border_color = NA,
-  legend_title = NULL, legend_direction = "horizontal",
-  font_size = 5, expand_size = 1, spacing_scaling = 1, width = 0.1,
-  triangle_size = 0.1)
+  direction = 1,
+  spacing = "natural",
+  border_color = NA,
+  legend_title = NULL,
+  legend_direction = "horizontal",
+  font_size = 5,
+  expand_size = 1,
+  spacing_scaling = 1,
+  width = 0.1,
+  triangle_size = 0.1
+)
 }
 \description{
 plot_discrete_bar

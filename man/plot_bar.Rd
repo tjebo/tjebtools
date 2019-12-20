@@ -4,12 +4,23 @@
 \alias{plot_bar}
 \title{plot_bar}
 \usage{
-plot_bar(breaks, palette = "Greys", colors = NULL,
-  label_position = "break", direction = 1, spacing = "natural",
-  border_color = NA, legend_title = NULL,
-  legend_direction = "horizontal", font_size = 10, breaksize = 0.1,
-  expand_size = 1, spacing_scaling = 1, width = 0.1,
-  triangle_size = 0.1)
+plot_bar(
+  breaks,
+  palette = "Greys",
+  colors = NULL,
+  label_position = "break",
+  direction = 1,
+  spacing = "natural",
+  border_color = NA,
+  legend_title = NULL,
+  legend_direction = "horizontal",
+  font_size = 10,
+  breaksize = 0.1,
+  expand_size = 1,
+  spacing_scaling = 1,
+  width = 0.1,
+  triangle_size = 0.1
+)
 }
 \description{
 plot_bar

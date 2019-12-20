@@ -4,9 +4,16 @@
 \alias{geom_pointpath}
 \title{geom_pointpath}
 \usage{
-geom_pointpath(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE)
+geom_pointpath(
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  ...,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+)
 }
 \description{
 makes point and line plot just as plot type = b
