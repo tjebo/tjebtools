@@ -1,12 +1,39 @@
 #' plot_bar
 #' @author SO::AF7, modified by Tjebo
+#' @description Creates a "fake legend" - Plotting a discrete color scale bar for continuous data, to combine with main plot using plot combining packages such as patchwork
+#' @param breaks Required! Vector of breaks. If +-Inf are used, triangles will be added to the sides of the color bar
+#' @param palette Default = "Greys", RColorBrewer palette to use
+#' @param colors Default: RColorBrewer::brewer.pal(length(breaks) - 1, palette). Alternatively, set colors manually by providing vector of colors
+#' @param direction Flip colors? Either 1 or -1
+#' @param spacing Spacing between labels. String, either "natural" or "constant"
+#' @param border_color default = no border color
+#' @param legend_title
+#' @param legend_direction string. Either "horizontal" or "vertical"
+#' @param font_size
+#' @param expand_size  Controls spacing around legend plot
+#' @param spacing_scaling  Multiplicative factor for label and legend title spacing
+#' @param width Thickness of color bar
+#' @param triangle_size Relative width of +-Inf triangles
+#'
+#' @import ggplot2
+#'
 #' @export
+#'
+plot_bar <- function (breaks, palette = 'Greys',
+                      colors = NULL,
+                      label_position = 'break',
+                      direction = 1,
+                      spacing = "natural",
+                      border_color = NA,
+                      legend_title = NULL,
+                      legend_direction = "horizontal",
+                      font_size = 10,
+                      breaksize = .1,
+                      expand_size = 1,
+                      spacing_scaling = 1,
+                      width = 0.1,
+                      triangle_size = 0.1) {
 
-
-plot_bar <- function (breaks, palette = 'Greys', colors = NULL,label_position = 'break',
-                      direction = 1, spacing = "natural", border_color = NA,
-                      legend_title = NULL, legend_direction = "horizontal", font_size = 10, breaksize = .1,
-                      expand_size = 1, spacing_scaling = 1, width = 0.1, triangle_size = 0.1) {
   if (!(label_position %in% c("break", "centered")))
     stop("label_position must be either 'break' or 'centered'")
 
@@ -18,11 +45,13 @@ plot_bar <- function (breaks, palette = 'Greys', colors = NULL,label_position = 
 
   if (!(legend_direction %in% c("horizontal", "vertical")))
     stop("legend_direction must be either 'horizontal' or 'vertical'")
+
   breaks <- as.numeric(breaks)
   new_breaks <- sort(unique(breaks))
 
   if (any(new_breaks != breaks))
     warning("Wrong order or duplicated breaks")
+
   breaks <- new_breaks
 
   if (!is.null(colors)){
@@ -37,6 +66,7 @@ plot_bar <- function (breaks, palette = 'Greys', colors = NULL,label_position = 
       }
     }
   }
+
   if (label_position == 'break') {
     if (palette %in% rownames(RColorBrewer::brewer.pal.info)) {
       n_max_palette <- RColorBrewer::brewer.pal.info$maxcolors[which(rownames(RColorBrewer::brewer.pal.info) == palette)]
@@ -48,9 +78,9 @@ plot_bar <- function (breaks, palette = 'Greys', colors = NULL,label_position = 
 
     }
 
+  if (!missing(colors))
+    warning("Ignoring RColorBrewer palette [", palette, "], since colors were passed manually")
 
-    # if (!missing(colors))
-    #warning("Ignoring RColorBrewer palette '", palette, "', since colors were passed manually")
     if (direction == -1)
       colors = rev(colors)
     inf_breaks = which(is.infinite(breaks))
