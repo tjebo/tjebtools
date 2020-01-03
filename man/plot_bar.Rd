@@ -22,8 +22,31 @@ plot_bar(
   triangle_size = 0.1
 )
 }
+\arguments{
+\item{breaks}{Required! Vector of breaks. If +-Inf are used, triangles will be added to the sides of the color bar}
+
+\item{palette}{Default = "Greys", RColorBrewer palette to use}
+
+\item{colors}{Default: RColorBrewer::brewer.pal(length(breaks) - 1, palette). Alternatively, set colors manually by providing vector of colors}
+
+\item{direction}{Flip colors? Either 1 or -1}
+
+\item{spacing}{Spacing between labels. String, either "natural" or "constant"}
+
+\item{border_color}{default = no border color}
+
+\item{legend_direction}{string. Either "horizontal" or "vertical"}
+
+\item{expand_size}{Controls spacing around legend plot}
+
+\item{spacing_scaling}{Multiplicative factor for label and legend title spacing}
+
+\item{width}{Thickness of color bar}
+
+\item{triangle_size}{Relative width of +-Inf triangles}
+}
 \description{
-plot_bar
+Creates a "fake legend" - Plotting a discrete color scale bar for continuous data, to combine with main plot using plot combining packages such as patchwork
 }
 \author{
 SO::AF7, modified by Tjebo

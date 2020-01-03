@@ -8,7 +8,7 @@
 count_pateyes <- function(y, return_text = FALSE){
   x <- eval(y)
 
-  pat_col <- names(x)[grepl('(?=.*pat)(?=.*id)', names(x), ignore.case = TRUE, perl = TRUE)]
+  pat_col <- names(x)[grepl('pat|id', names(x), ignore.case = TRUE)]
   eye_col <- names(x)[grepl('eye', names(x), ignore.case = TRUE, perl = TRUE)]
 
   #return(length(eye_col))
