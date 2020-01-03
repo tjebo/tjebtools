@@ -1,11 +1,14 @@
 #' count_pateyes
 #' @name count_pateyes
 #' @description Looks for columns that identify patients and eyes and counts number of patients and eyes.
+
 #' @export
-#' @param y dataframe where patient / eye information is included. column which contains the patient ID must include the strings "pat" and "id". the column which contains eye must contain the string "eye". There should be only one column which fulfills each condition.
+#' @param y dataframe where patient / eye information is included.
+#' The patient ID column name needs to contain the strings "pat" OR "id" ignore.case = TRUE.
+#' The eye column name needs to contain the string "eye" ignore.case = TRUE
 #' @param return_text default = FALSE (TRUE will return text which can be pasted for example into a markdown document). As default a named vector will be returned
 
-count_pateyes <- function(y, return_text = FALSE){
+count_pateyes <- function(y, text = FALSE){
   x <- eval(y)
 
   pat_col <- names(x)[grepl('pat|id', names(x), ignore.case = TRUE)]
@@ -13,7 +16,7 @@ count_pateyes <- function(y, return_text = FALSE){
 
   #return(length(eye_col))
   if(length(eye_col) < 1 | length(pat_col) < 1 )
-    stop("Patient and/or eye column(s) are missing.\n The patient ID column name need to contain both strings \"pat\" and \"ID\" at any location.\n The eye column name needs to contain the string \"eye\" (for both columns ignore.case = TRUE)")
+    stop("Patient and/or eye column(s) are missing.\n The patient ID column name needs to contain either of or both strings \"pat\" and \"ID\" at any location.\n The eye column name needs to contain the string \"eye\" (for both columns ignore.case = TRUE)")
 
   if(length(eye_col) > 1 | length(pat_col) > 1 )
     stop("Patient and/or eye column(s) are not uniquely identified.")
@@ -21,8 +24,8 @@ count_pateyes <- function(y, return_text = FALSE){
   n_pat <- length(unique(x[[pat_col]]))
   n_eyes <- length(unique(interaction(x[[pat_col]], x[[eye_col]])))
 
-  if(return_text == TRUE){
-    return(paste('Data frame "', deparse(substitute(y)), '" contains data on', n_eyes, 'eyes of', n_pat, 'patients'))
+  if(text == TRUE){
+    return(paste(deparse(substitute(y)), ':', n_eyes, 'eyes of', n_pat, 'patients'))
 
   }
   return(c(Patients = n_pat, Eyes = n_eyes))
