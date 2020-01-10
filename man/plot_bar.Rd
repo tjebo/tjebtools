@@ -19,11 +19,12 @@ plot_bar(
   expand_size = 1,
   spacing_scaling = 1,
   width = 0.1,
-  triangle_size = 0.1
+  triangle_size = 0.1,
+  ...
 )
 }
 \arguments{
-\item{breaks}{Required! Vector of breaks. If +-Inf are used, triangles will be added to the sides of the color bar}
+\item{breaks}{Required! Integer or numeric vector of breaks (should have unique values). If +-Inf are used, triangles will be added to the sides of the color bar}
 
 \item{palette}{Default = "Greys", RColorBrewer palette to use}
 
@@ -35,7 +36,11 @@ plot_bar(
 
 \item{border_color}{default = no border color}
 
+\item{legend_title}{legend title}
+
 \item{legend_direction}{string. Either "horizontal" or "vertical"}
+
+\item{font_size}{font size}
 
 \item{expand_size}{Controls spacing around legend plot}
 

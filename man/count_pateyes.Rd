@@ -4,10 +4,12 @@
 \alias{count_pateyes}
 \title{count_pateyes}
 \usage{
-count_pateyes(y, return_text = FALSE)
+count_pateyes(y, text = FALSE)
 }
 \arguments{
-\item{y}{dataframe where patient / eye information is included. column which contains the patient ID must include the strings "pat" and "id". the column which contains eye must contain the string "eye". There should be only one column which fulfills each condition.}
+\item{y}{dataframe where patient / eye information is included.
+The patient ID column name needs to contain the strings "pat" OR "id" ignore.case = TRUE.
+The eye column name needs to contain the string "eye" ignore.case = TRUE}
 
 \item{return_text}{default = FALSE (TRUE will return text which can be pasted for example into a markdown document). As default a named vector will be returned}
 }

@@ -1,91 +1,32 @@
 #' plot_bar
 #' @author SO::AF7, modified by Tjebo
-<<<<<<< HEAD
 #' @description Creates a "fake legend" - Plotting a discrete color scale bar for continuous data, to combine with main plot using plot combining packages such as patchwork
-#' @param breaks Required! Vector of breaks. If +-Inf are used, triangles will be added to the sides of the color bar
-=======
-#' @description Creates a "fake legend" - Plotting a discrete color scale bar for continuous data,
-#' to combine with main plot using plot combining packages such as patchwork.
-#'
+
 #' @param breaks Required! Integer or numeric vector of breaks (should have unique values). If +-Inf are used, triangles will be added to the sides of the color bar
->>>>>>> 51544211d55c8a6f80db616659a5cbb95c01ec6a
 #' @param palette Default = "Greys", RColorBrewer palette to use
 #' @param colors Default: RColorBrewer::brewer.pal(length(breaks) - 1, palette). Alternatively, set colors manually by providing vector of colors
 #' @param direction Flip colors? Either 1 or -1
 #' @param spacing Spacing between labels. String, either "natural" or "constant"
 #' @param border_color default = no border color
-#' @param legend_title
+#' @param legend_title legend title
 #' @param legend_direction string. Either "horizontal" or "vertical"
-#' @param font_size
+#' @param font_size font size
 #' @param expand_size  Controls spacing around legend plot
 #' @param spacing_scaling  Multiplicative factor for label and legend title spacing
 #' @param width Thickness of color bar
 #' @param triangle_size Relative width of +-Inf triangles
 #'
-<<<<<<< HEAD
-#' @import ggplot2
+#' @import ggplot2 RColorBrewer
 #'
 #' @export
 #'
-plot_bar <- function (breaks, palette = 'Greys',
-                      colors = NULL,
-                      label_position = 'break',
-                      direction = 1,
-                      spacing = "natural",
-                      border_color = NA,
-                      legend_title = NULL,
-                      legend_direction = "horizontal",
-                      font_size = 10,
-                      breaksize = .1,
-                      expand_size = 1,
-                      spacing_scaling = 1,
-                      width = 0.1,
-                      triangle_size = 0.1) {
 
-  if (!(label_position %in% c("break", "centered")))
-=======
-#' @import ggplot2, RColorbrewer
-#'
-#' @export
-#'
 plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = "break",
                      direction = 1, spacing = "natural", border_color = NA, legend_title = NULL,
                      legend_direction = "horizontal", font_size = 10, breaksize = .1,
                      expand_size = 1, spacing_scaling = 1, width = 0.1, triangle_size = 0.1, ...) {
 
-  if (!(label_position %in% c("break", "centered"))) {
->>>>>>> 51544211d55c8a6f80db616659a5cbb95c01ec6a
-    stop("label_position must be either 'break' or 'centered'")
-  }
-
-  if (!(spacing %in% c("natural", "constant"))) {
-    stop("spacing must be either 'natural' or 'constant'")
-  }
-
-  if (!(direction %in% c(1, -1))) {
-    stop("direction must be either 1 or -1")
-  }
-
-  if (!(legend_direction %in% c("horizontal", "vertical"))) {
-    stop("legend_direction must be either 'horizontal' or 'vertical'")
-<<<<<<< HEAD
-=======
-  }
->>>>>>> 51544211d55c8a6f80db616659a5cbb95c01ec6a
-
-  breaks <- as.numeric(breaks)
-  new_breaks <- sort(unique(breaks))
-
-  if (any(new_breaks != breaks)) {
-    warning("Wrong order or duplicated breaks")
-<<<<<<< HEAD
-=======
-  }
->>>>>>> 51544211d55c8a6f80db616659a5cbb95c01ec6a
-
-  breaks <- new_breaks
-
-  if (!is.null(colors)) {
+  if(!is.null(colors)) {
     warning("Ignoring RColorBrewer palette [", palette, "], since colors were passed manually")
     palette <- 0
     if (label_position == "break") {
@@ -103,11 +44,32 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
     }
   }
 
-<<<<<<< HEAD
-  if (label_position == 'break') {
-=======
+  if (!(label_position %in% c("break", "centered"))) {
+    stop("label_position must be either 'break' or 'centered'")
+  }
+
+  if (!(spacing %in% c("natural", "constant"))) {
+    stop("spacing must be either 'natural' or 'constant'")
+  }
+
+  if (!(direction %in% c(1, -1))) {
+    stop("direction must be either 1 or -1")
+  }
+
+  if (!(legend_direction %in% c("horizontal", "vertical"))) {
+    stop("legend_direction must be either 'horizontal' or 'vertical'")
+  }
+
+  breaks <- as.numeric(breaks)
+  new_breaks <- sort(unique(breaks))
+
+  if (any(new_breaks != breaks)) {
+    warning("Wrong order or duplicated breaks")
+  }
+
+  breaks <- new_breaks
+
   if (label_position == "break") {
->>>>>>> 51544211d55c8a6f80db616659a5cbb95c01ec6a
     if (palette %in% rownames(RColorBrewer::brewer.pal.info)) {
       n_max_palette <- RColorBrewer::brewer.pal.info$maxcolors[which(rownames(RColorBrewer::brewer.pal.info) == palette)]
       palette <- RColorBrewer::brewer.pal(n_max_palette, palette)
@@ -117,19 +79,6 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
       colors <- colfunc(length(breaks) - 1)
     }
 
-<<<<<<< HEAD
-  if (!missing(colors))
-    warning("Ignoring RColorBrewer palette [", palette, "], since colors were passed manually")
-
-    if (direction == -1)
-      colors = rev(colors)
-    inf_breaks = which(is.infinite(breaks))
-    if (length(inf_breaks) != 0)
-      breaks = breaks[-inf_breaks]
-    plotcolors = colors
-    n_breaks = length(breaks)
-    labels = breaks
-=======
     if (direction == -1) {
       colors <- rev(colors)
     }
@@ -140,7 +89,6 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
     plotcolors <- colors
     n_breaks <- length(breaks)
     labels <- breaks
->>>>>>> 51544211d55c8a6f80db616659a5cbb95c01ec6a
     if (spacing == "constant") {
       breaks <- 1:n_breaks
     }
@@ -151,11 +99,11 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
     )[-n_breaks, ]
     xmin <- 1 - width / 2
     xmax <- 1 + width / 2
-    cbar_plot <- ggplot(
+    cbar_plot <- ggplot2::ggplot(
       cbar_df,
-      aes(xmin = xmin, xmax = xmax, ymin = y, ymax = yend, fill = factor(color, levels = 1:length(colors)))
+      ggplot2::aes(xmin = xmin, xmax = xmax, ymin = y, ymax = yend, fill = factor(color, levels = 1:length(colors)))
     ) +
-      geom_rect(show.legend = FALSE, color = border_color)
+      ggplot2::geom_rect(show.legend = FALSE, color = border_color)
 
     if (any(inf_breaks == 1)) {
       firstv <- breaks[1]
@@ -164,9 +112,9 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
         2
       ), firstv - diff(r_breaks) * triangle_size))
       plotcolors <- plotcolors[-1]
-      cbar_plot <- cbar_plot + geom_polygon(
+      cbar_plot <- cbar_plot + ggplot2::geom_polygon(
         data = polystart,
-        aes(x = x, y = y), show.legend = FALSE, inherit.aes = FALSE,
+        ggplot2::aes(x = x, y = y), show.legend = FALSE, inherit.aes = FALSE,
         fill = colors[1], color = border_color
       )
     }
@@ -177,9 +125,9 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
         2
       ), lastv + diff(r_breaks) * triangle_size))
       plotcolors <- plotcolors[-length(plotcolors)]
-      cbar_plot <- cbar_plot + geom_polygon(
+      cbar_plot <- cbar_plot + ggplot2::geom_polygon(
         data = polyend,
-        aes(x = x, y = y), show.legend = FALSE, inherit.aes = FALSE,
+        ggplot2::aes(x = x, y = y), show.legend = FALSE, inherit.aes = FALSE,
         fill = colors[length(colors)], color = border_color
       )
     }
@@ -187,7 +135,7 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
       mul <- 1
       x <- xmin
       xend <- xmax
-      cbar_plot <- cbar_plot + coord_flip()
+      cbar_plot <- cbar_plot + ggplot2::coord_flip()
       angle <- 0
       legend_position <- xmax + 0.1 * spacing_scaling
     }
@@ -200,43 +148,43 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
     }
 
     cbar_plot <- cbar_plot +
-      geom_segment(
+      ggplot2::geom_segment(
         data = data.frame(y = breaks, yend = breaks),
-        aes(y = y, yend = yend),
+        ggplot2::aes(y = y, yend = yend),
         x = x - 0.05 * mul * spacing_scaling,
         xend = xend, inherit.aes = FALSE
       ) +
-      annotate(
+      ggplot2::annotate(
         geom = "text",
         x = x - 0.1 * mul * spacing_scaling, y = breaks,
         label = breaks,
         size = font_size
       ) +
-      scale_x_continuous(expand = c(expand_size, expand_size)) +
-      scale_fill_manual(values = plotcolors) +
-      theme_void()
+      ggplot2::scale_x_continuous(expand = c(expand_size, expand_size)) +
+      ggplot2::scale_fill_manual(values = plotcolors) +
+      ggplot2::theme_void()
 
     if (label_position == "centered") {
       cbar_plot <- cbar_plot +
-        geom_segment(
+        ggplot2::geom_segment(
           data = data.frame(y = breaks, yend = breaks),
-          aes(y = y, yend = yend),
+          ggplot2::aes(y = y, yend = yend),
           x = x - 0.05 * mul * spacing_scaling,
           xend = xend, inherit.aes = FALSE
         ) +
-        annotate(
+        ggplot2::annotate(
           geom = "text",
           x = x - 0.1 * mul * spacing_scaling, y = breaks[-length(breaks)] + diff(breaks) / 2,
           label = breaks[1:length(breaks) - 1],
           size = font_size
         ) +
-        scale_x_continuous(expand = c(expand_size, expand_size)) +
-        scale_fill_manual(values = plotcolors) +
-        theme_void()
+        ggplot2::scale_x_continuous(expand = c(expand_size, expand_size)) +
+        ggplot2::scale_fill_manual(values = plotcolors) +
+        ggplot2::theme_void()
     }
 
     if (!is.null(legend_title)) {
-      cbar_plot <- cbar_plot + annotate(
+      cbar_plot <- cbar_plot + ggplot2::annotate(
         geom = "text", x = legend_position,
         y = mean(r_breaks), label = legend_title, angle = angle,
         size = font_size
@@ -281,11 +229,11 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
 
     xmin <- 1 - width / 2
     xmax <- 1 + width / 2
-    cbar_plot <- ggplot(
+    cbar_plot <- ggplot2::ggplot(
       cbar_df,
-      aes(xmin = xmin, xmax = xmax, ymin = y, ymax = yend, fill = factor(color, levels = 1:length(colors)))
+      ggplot2::aes(xmin = xmin, xmax = xmax, ymin = y, ymax = yend, fill = factor(color, levels = 1:length(colors)))
     ) +
-      geom_rect(show.legend = FALSE, color = border_color)
+      ggplot2::geom_rect(show.legend = FALSE, color = border_color)
 
     if (any(inf_breaks == 1)) {
       firstv <- breaks[1]
@@ -294,9 +242,9 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
         2
       ), firstv - diff(r_breaks) * triangle_size))
       plotcolors <- plotcolors
-      cbar_plot <- cbar_plot + geom_polygon(
+      cbar_plot <- cbar_plot + ggplot2::geom_polygon(
         data = polystart,
-        aes(x = x, y = y), show.legend = FALSE, inherit.aes = FALSE,
+        ggplot2::aes(x = x, y = y), show.legend = FALSE, inherit.aes = FALSE,
         fill = colors[1], color = border_color
       )
     }
@@ -307,9 +255,9 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
         2
       ), lastv + diff(r_breaks) * triangle_size))
       plotcolors <- plotcolors
-      cbar_plot <- cbar_plot + geom_polygon(
+      cbar_plot <- cbar_plot + ggplot2::geom_polygon(
         data = polyend,
-        aes(x = x, y = y), show.legend = FALSE, inherit.aes = FALSE,
+        ggplot2::aes(x = x, y = y), show.legend = FALSE, inherit.aes = FALSE,
         fill = colors[length(colors)], color = border_color
       )
     }
@@ -317,7 +265,7 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
       mul <- 1
       x <- xmin
       xend <- xmax
-      cbar_plot <- cbar_plot + coord_flip()
+      cbar_plot <- cbar_plot + ggplot2::coord_flip()
       angle <- 0
       legend_position <- xmax + 0.1 * spacing_scaling
     }
@@ -333,26 +281,26 @@ plot_bar <- function(breaks, palette = "Greys", colors = NULL, label_position = 
 
 
     cbar_plot <- cbar_plot +
-      geom_segment(
+      ggplot2::geom_segment(
         data = data.frame(y = y_seg, yend = y_seg),
-        aes(y = y, yend = yend),
+        ggplot2::aes(y = y, yend = yend),
         size = breaksize,
         x = x - 0.05 * mul * spacing_scaling,
         xend = xend, inherit.aes = FALSE
       ) +
-      annotate(
+      ggplot2::annotate(
         geom = "text",
         x = x - 0.1 * mul * spacing_scaling, y = val_br[-length(val_br)] + diff(val_br) / 2,
         label = breaks,
         size = font_size * 5 / 14
       ) +
-      scale_x_continuous(expand = c(expand_size, expand_size)) +
-      scale_fill_manual(values = plotcolors) +
-      theme_void()
+      ggplot2::scale_x_continuous(expand = c(expand_size, expand_size)) +
+      ggplot2::scale_fill_manual(values = plotcolors) +
+      ggplot2::theme_void()
   }
 
   if (!is.null(legend_title)) {
-    cbar_plot <- cbar_plot + annotate(
+    cbar_plot <- cbar_plot + ggplot2::annotate(
       geom = "text", x = legend_position,
       y = mean(r_breaks), label = legend_title, angle = angle,
       size = font_size

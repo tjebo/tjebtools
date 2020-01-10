@@ -3,7 +3,7 @@ Type: Package
 Title: My utilities
 Version: 1.0
 Author: Tjebo - with inspiration by a lot of stackoverflow users. 
-Maintainer: The package maintainer <yourself@somewhere.net>
+Maintainer: Tjebo Heeren <tjebn@web.de>
 Description: Some more or less useful functions which help me in my day to day work
 License: MIT Licence
 Encoding: UTF-8
