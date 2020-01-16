@@ -3,17 +3,24 @@
 #' @description Looks for columns that identify patients and eyes and counts number of patients and eyes.
 
 #' @export
-#' @param y dataframe where patient / eye information is included.
-#' The patient ID column name needs to contain the strings "pat" OR "id" ignore.case = TRUE.
-#' The eye column name needs to contain the string "eye" ignore.case = TRUE
-#' @param return_text default = FALSE (TRUE will return text which can be pasted for example into a markdown document). As default a named vector will be returned
+#' @param date dataframe where patient / eye information is included.
+#' @param id id column. If not specified, automatically selected. In this case, the patient ID column name needs to contain the strings "pat" OR "id" ignore.case = TRUE.
+#' @param eye eye colum. If not specified, automatically selected, in which case the eye column name needs to contain the string "eye" ignore.case = TRUE
+#' @param text default = FALSE (TRUE will return text which can be pasted for example into a markdown document). As default a named vector will be returned
 
-count_pateyes <- function(y, text = FALSE){
-  x <- eval(y)
+count_pateyes <- function(data, id = NULL, eye = NULL, text = FALSE){
+  x <- eval(data)
 
-  pat_col <- names(x)[grepl('pat|id', names(x), ignore.case = TRUE)]
-  eye_col <- names(x)[grepl('eye', names(x), ignore.case = TRUE, perl = TRUE)]
-
+  if(missing(id)) {
+    pat_col <- names(x)[grepl('pat|id', names(x), ignore.case = TRUE)]
+  } else {
+    pat_col <- deparse(substitute(id))
+  }
+  if(missing(eye)) {
+    eye_col <- names(x)[grepl('eye', names(x), ignore.case = TRUE, perl = TRUE)]
+  } else {
+    eye_col <- deparse(substitute(eye))
+  }
   #return(length(eye_col))
   if(length(eye_col) < 1 | length(pat_col) < 1 )
     stop("Patient and/or eye column(s) are missing.\n The patient ID column name needs to contain either of or both strings \"pat\" and \"ID\" at any location.\n The eye column name needs to contain the string \"eye\" (for both columns ignore.case = TRUE)")
@@ -31,21 +38,9 @@ count_pateyes <- function(y, text = FALSE){
   return(c(Patients = n_pat, Eyes = n_eyes))
 }
 
-
-#' completeFun
-#' @name completeFUN
-#' @export
-
-completeFun <- function(data, desiredCols) {
-  completeVec <- complete.cases(data[, desiredCols])
-  return(data[completeVec, ])
-}
-
-
 #' paste_easy
-#' @name `%+%`
+#' @name csv
 #' @export
-`%+%` <- function(a, b) paste0(a, b)
 
 csv <- function(x, name = deparse(substitute(x))) {
   file = paste0(name, '.csv')
