@@ -72,10 +72,7 @@ get_age <- function(from_date,to_date = lubridate::now(),dec = FALSE){
 
 
 show_stats <- function(x) {
-  funs <- list(mean = mean,
-               sd = sd,
-               min = min,
-               max = max )
+  funs <- list(mean = mean, sd = sd, min = min, max = max )
 
   if(is.atomic(x) == TRUE) {
     r1 <- lapply(funs, function(f) f(x, na.rm = TRUE))
