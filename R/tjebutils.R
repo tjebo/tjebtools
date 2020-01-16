@@ -38,19 +38,10 @@ count_pateyes <- function(data, id = NULL, eye = NULL, text = FALSE){
   return(c(Patients = n_pat, Eyes = n_eyes))
 }
 
-#' paste_easy
-#' @name csv
-#' @export
-
-csv <- function(x, name = deparse(substitute(x))) {
-  file = paste0(name, '.csv')
-  write.csv(x, file, row.names = F)
-}
 
 #' get_age
 #' @author Moody_Mudskipper, modified from dyears() to years()
 #' @export
-
 
 get_age <- function(from_date,to_date = lubridate::now(),dec = FALSE){
   if(is.character(from_date)) from_date <- lubridate::as_date(from_date)
@@ -239,38 +230,6 @@ every_nth <- function(x, nth, empty = TRUE, inverse = FALSE)
   }
 }
 
-#' name_bylist
-#' @author tjebo
-#'
-#' @description creates column assigning values based on the corresponding value in a list
-#' @export
-
-name_bylist <- function (df, col_name, list) {
-  stacked_list <- stack(list)
-  tm1 <- deparse(substitute(list))
-  stacked_list$ind <- as.character(stacked_list$ind)
-  df <- merge(df, stacked_list, by.x = col_name, by.y = 'values', all.x = TRUE)
-  names(df)[names(df) == 'ind'] <- tm1
-  df
-}
-
-#' separate_bees
-#' @author Stackoverflow::Jimbou
-#'
-#' @description Creates split beeswarm plot
-#' @export
-
-separate_bees <- function(plot){
-  p <- ggplot_build(plot)
-  p$data[[1]] <-   p$data[[1]] %>%
-    mutate(diff = abs(x-round(x)),  # calculating the difference to the x axis position
-           # update the new position depending if group is even (+diff) or odd (-diff)
-           x = case_when(group %% 2 == 0 ~ round(x) + diff,
-                         TRUE ~ round(x) - diff)) %>%
-    select(-diff)
-  plot(ggplot_gtable(p))
-}
-
 #'
 #' The function will anonymize your data
 #'
@@ -299,8 +258,9 @@ anonymize <- function(df) {
   return(df)
 }
 
+
 #' csv
-#'
+#' @name csv
 #' @export
 
 csv <- function(x, name = deparse(substitute(x))) {
