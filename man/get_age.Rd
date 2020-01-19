@@ -4,11 +4,18 @@
 \alias{get_age}
 \title{get_age}
 \usage{
-get_age(from_date, to_date = lubridate::now(), dec = FALSE)
+get_age(from_date, to_date = lubridate::now(), period = FALSE)
+}
+\arguments{
+\item{from_date}{start date}
+
+\item{to_date}{end date}
+
+\item{period}{default FALSE: output as a duration. If TRUE, output as a period}
 }
 \description{
-get_age
+calculates age in years, either as duration or as period
 }
 \author{
-Moody_Mudskipper, modified from dyears() to years()
+SO::Moody_Mudskipper, mildly modified
 }

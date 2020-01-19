@@ -4,18 +4,21 @@
 \alias{weekly}
 \title{weekly}
 \usage{
-weekly(x, week_end = "sunday")
+weekly(x, week_end = "sunday", ceiling = TRUE)
 }
 \arguments{
 \item{x}{Vector of dates Dataframe in which the vectors are found}
 
-\item{week_end}{desired end of week}
+\item{week_end}{what's the end of week? Takes english names of weekdays as quoted string, capital letters allowed}
+
+\item{ceiling}{default TRUE: last day of the week for each weekend. if FALSE, first day of week}
 }
 \value{
 vector of dates. can be used in aggregations, e.g. with zoo.aggregate
 }
 \description{
-makes vector of dates of beginning of full (!) weeks
+Takes vector of dates and outputs floor or ceiling date of the respective week.
+The end of week can be defined. The output can be used e.g. for zoo aggregation
 }
 \author{
 tjebo - eclectic choice of functions, mainly with the help of SO::G.Grothendieck and SO::Joshua Ulrich
