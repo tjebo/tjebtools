@@ -2,13 +2,14 @@
 #' @name count_pateyes
 #' @description Looks for columns that identify patients and eyes and counts number of patients and eyes.
 
-#' @export
 #' @param date dataframe where patient / eye information is included.
 #' @param id id column. If not specified, automatically selected. In this case, the patient ID column name needs to contain the strings "pat" OR "id" ignore.case = TRUE.
 #' @param eye eye colum. If not specified, automatically selected, in which case the eye column name needs to contain the string "eye" ignore.case = TRUE
 #' @param text default = FALSE (TRUE will return text which can be pasted for example into a markdown document). As default a named vector will be returned
-
+#' @export
+#'
 count_pateyes <- function(data, id = NULL, eye = NULL, text = FALSE){
+
   x <- eval(data)
 
   if(missing(id)) {
