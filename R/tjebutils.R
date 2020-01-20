@@ -110,12 +110,13 @@ weekly <- function(x, week_end = 'sunday', ceiling = TRUE) {
 #'
 #' @author  modified function timeDate::holidayLONDON - for description see ?timeDate::holidayLONDON
 #' @description includes NAMES of bank holidays in output vector
-#' @import timeDate
 #' @return vector of POSIX.
 #' @export
 
-uk_bankholidays <- function (year = getRmetricsOptions("currentYear"))
-{
+uk_bankholidays <- function (year = getRmetricsOptions("currentYear")) {
+  if(!require('timeDate'))
+    stop('Please install the timeDate package')
+
   holidays <- NULL
   for (y in year) {
     if (y >= 1834 & y <= 1870) {
@@ -129,7 +130,7 @@ uk_bankholidays <- function (year = getRmetricsOptions("currentYear"))
       if (y <= 1964) {
         holidays <- c(holidays, Easter = as.character(Easter(y,
                                                              50)))
-        lon <- timeDate(.on.or.after(y, 8, 1, 1), zone = "London",
+        lon <- timeDate::timeDate(.on.or.after(y, 8, 1, 1), zone = "London",
                         FinCenter = "Europe/London")
         holidays <- c(holidays, as.character(lon))
       }
@@ -143,11 +144,11 @@ uk_bankholidays <- function (year = getRmetricsOptions("currentYear"))
           holidays <- c(holidays, dts)
         }
         else {
-          lon <- timeDate(.last.of.nday(y, 5, 31, 1),
+          lon <- timeDate::timeDate(.last.of.nday(y, 5, 31, 1),
                           zone = "London", FinCenter = "Europe/London")
           holidays <- c(holidays, SpringBank = as.character(lon))
         }
-        lon <- timeDate(.last.of.nday(y, 8, 31, 1), zone = "London",
+        lon <- timeDate::timeDate(.last.of.nday(y, 8, 31, 1), zone = "London",
                         FinCenter = "Europe/London")
         holidays <- c(holidays, SummerBank = as.character(lon))
       }
@@ -177,7 +178,7 @@ uk_bankholidays <- function (year = getRmetricsOptions("currentYear"))
       if (y >= 1974) {
         posix1 <- as.POSIXlt(NewYearsDay(y))
         if (posix1$wday == 0 | posix1$wday == 6) {
-          lon <- timeDate(.on.or.after(y, 1, 1, 1), zone = "London",
+          lon <- timeDate::timeDate(.on.or.after(y, 1, 1, 1), zone = "London",
                           FinCenter = "Europe/London")
           holidays <- c(holidays, NewYear = as.character(lon))
         }
@@ -199,7 +200,7 @@ uk_bankholidays <- function (year = getRmetricsOptions("currentYear"))
           holidays <- c(holidays, EarlyMay =dts)
         }
         else {
-          lon <- timeDate(.on.or.after(y, 5, 1, 1), zone = "London",
+          lon <- timeDate::timeDate(.on.or.after(y, 5, 1, 1), zone = "London",
                           FinCenter = "Europe/London")
           holidays <- c(holidays, EarlyMay = as.character(lon))
         }
@@ -207,7 +208,7 @@ uk_bankholidays <- function (year = getRmetricsOptions("currentYear"))
     }
   }
   holidays <- sort(holidays)
-  ans <- timeDate(format(holidays), zone = "London", FinCenter = "Europe/London")
+  ans <- timeDate::timeDate(format(holidays), zone = "London", FinCenter = "Europe/London")
   posix1 <- as.POSIXlt(ans, tz = "GMT")
   ans[!(posix1$wday == 0 | posix1$wday == 6)]
 }
