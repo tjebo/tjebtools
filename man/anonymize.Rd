@@ -2,9 +2,31 @@
 % Please edit documentation in R/tjebutils.R
 \name{anonymize}
 \alias{anonymize}
-\title{The function will anonymize your data}
+\alias{anonymise}
+\title{anonymize}
 \usage{
-anonymize(df)
+anonymize(
+  df,
+  simple_names = TRUE,
+  replace_rownames = FALSE,
+  colString = "var",
+  rowString = "sample"
+)
+
+anonymise(
+  df,
+  simple_names = TRUE,
+  replace_rownames = FALSE,
+  colString = "var",
+  rowString = "sample"
+)
+}
+\arguments{
+\item{df}{data frame to anonymise}
+
+\item{simple_names}{logical, column names will be converted to letters. If FALSE, colString will be used for renaming}
+
+\item{replace_rownames}{if TRUE, replacement with string from rowString argument}
 }
 \value{
 Data frame
@@ -13,5 +35,5 @@ Data frame
 The function will anonymize your data
 }
 \author{
-Stackoverflow::Etienne Low-Décarie, slightly modified
+With the help of Stackoverflow Etienne Low-Décarie and G.Simpson, modified
 }
