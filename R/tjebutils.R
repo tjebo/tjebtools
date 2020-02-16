@@ -81,9 +81,10 @@ show_stats <- function(x, dec = 1) {
     r1 <- lapply(funs, function(f) f(x))
     unlist(r1)
   } else if (typeof(x) == "list") {
-    x <- Filter(is.numeric, x)
-    result <- lapply(funs, mapply, x)
-    list_res <- lapply(result, function(x) round(x, digits = dec))
+    x_num <- Filter(is.numeric, x)
+    if(!identical(x, x_num)) warning("Character columns or list elements removed")
+    result <- lapply(funs, mapply, x_num)
+    list_res <- lapply(result, function(y) round(y, digits = dec))
     data.frame(list_res)
   }
 }
