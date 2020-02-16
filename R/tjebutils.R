@@ -62,20 +62,28 @@ get_age <- function(from_date, to_date = lubridate::now(), period = FALSE){
 #' show_stats
 #'
 #' @description pulls the most commonly used summary statistics
-#' @param x numeric/integer vector
-#' @return named vector
+#' @param x either vector or list of vectors. Data frames supported, but should not contain character vectors
+#' @param dec how many decimals are displayed
+#' @return named vector (for vector) or data frame (for list)
 #' @export
 
-show_stats <- function(x) {
-  funs <- list(mean = mean, sd = sd, min = min, max = max )
+show_stats <- function(x, dec = 1) {
+  funs <- list(
+    mean = purrr::partial(mean, na.rm = T),
+    sd = purrr::partial(sd, na.rm = T),
+    n = length,
+    median = purrr::partial(median, na.rm = TRUE),
+    min = purrr::partial(min, na.rm = TRUE),
+    max = purrr::partial(max, na.rm = TRUE)
+  )
 
-  if(is.atomic(x) == TRUE) {
-    r1 <- lapply(funs, function(f) f(x, na.rm = TRUE))
-    r1
-  } else if(typeof(x)=='list') {
-    result <- lapply(funs, mapply, x, na.rm = TRUE)
-    result[1:2] <- lapply(result[1:2], round, 1)
-    result
+  if (is.atomic(x) == TRUE) {
+    r1 <- lapply(funs, function(f) f(x))
+    unlist(r1)
+  } else if (typeof(x) == "list") {
+    result <- lapply(funs, mapply, x)
+    list_res <- lapply(result, function(x) round(x, digits = dec))
+    data.frame(list_res)
   }
 }
 

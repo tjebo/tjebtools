@@ -4,13 +4,15 @@
 \alias{show_stats}
 \title{show_stats}
 \usage{
-show_stats(x)
+show_stats(x, dec = 1)
 }
 \arguments{
-\item{x}{numeric/integer vector}
+\item{x}{either vector or list of vectors. Data frames supported, but should not contain character vectors}
+
+\item{dec}{how many decimals are displayed}
 }
 \value{
-named vector
+named vector (for vector) or data frame (for list)
 }
 \description{
 pulls the most commonly used summary statistics
