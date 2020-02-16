@@ -9,7 +9,7 @@ csv(x, name = deparse(substitute(x)))
 \arguments{
 \item{x}{data frame}
 
-\item{name}{name of csv file (does not need .csv extension), (quoted) string. If not specified, the name of the data frame will be used}
+\item{name}{Filename. Default: Name of dataframe to save as csv. Or character string (.csv extension added automatically)}
 }
 \description{
 wrapper around write.csv with default 'row.names = FALSE'

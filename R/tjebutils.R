@@ -294,7 +294,7 @@ anonymise <- anonymize
 #' @description wrapper around write.csv with default 'row.names = FALSE'
 #' @name csv
 #' @param x data frame
-#' @param name name of csv file (does not need .csv extension), (quoted) string. If not specified, the name of the data frame will be used
+#' @param name Filename. Default: Name of dataframe to save as csv. Or character string (.csv extension added automatically)
 #' @export
 
 csv <- function(x, name = deparse(substitute(x))) {
