@@ -62,7 +62,7 @@ get_age <- function(from_date, to_date = lubridate::now(), period = FALSE){
 #' show_stats
 #'
 #' @description pulls the most commonly used summary statistics
-#' @param x either vector or list of vectors. Data frames supported, but should not contain character vectors
+#' @param x either vector or list of vectors. Data frames supported. Character list elements (or columns) are removed!!
 #' @param dec how many decimals are displayed
 #' @return named vector (for vector) or data frame (for list)
 #' @export
@@ -81,6 +81,7 @@ show_stats <- function(x, dec = 1) {
     r1 <- lapply(funs, function(f) f(x))
     unlist(r1)
   } else if (typeof(x) == "list") {
+    x <- Filter(is.numeric, x)
     result <- lapply(funs, mapply, x)
     list_res <- lapply(result, function(x) round(x, digits = dec))
     data.frame(list_res)

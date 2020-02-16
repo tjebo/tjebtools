@@ -7,7 +7,7 @@
 show_stats(x, dec = 1)
 }
 \arguments{
-\item{x}{either vector or list of vectors. Data frames supported, but should not contain character vectors}
+\item{x}{either vector or list of vectors. Data frames supported. Character list elements (or columns) are removed!!}
 
 \item{dec}{how many decimals are displayed}
 }
