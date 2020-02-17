@@ -66,10 +66,23 @@ get_age <- function(from_date, to_date = lubridate::now(), period = FALSE){
 #' @description pulls the most commonly used summary statistics
 #' @param x either vector or list of vectors. Data frames supported. Character list elements (or columns) are removed!!
 #' @param dec how many decimals are displayed
+#' @param rownames logical. if FALSE, column with variable names will be created
 #' @return named vector (for vector) or data frame (for list)
+#' @examples
+#' x = y = z = c(rnorm(20), NA)
+#'
+#' # named or unnamed list
+#' mylist <- list(x = x, y = y, z = z)
+#' show_stats(mylist)
+#' # with a data frame
+#' mydf <- data.frame(x, y, z)
+#' show_stats(mydf)
+#' #If aggregation by group, split the data frame first
+#' mydf2 <- data.frame(group = rep(letters[1:2], each = 42), x, y, z)
+#' lapply(split(mydf2, mydf2$group), show_stats, rownames = FALSE)
 #' @export
 
-show_stats <- function(x, dec = 1) {
+show_stats <- function(x, dec = 1, rownames = TRUE) {
   if(!require('purrr'))
     stop('Please install the purrr package')
   funs <- list(
@@ -83,13 +96,23 @@ show_stats <- function(x, dec = 1) {
 
   if (is.atomic(x) == TRUE) {
     r1 <- lapply(funs, function(f) f(x))
-    unlist(r1)
+
+    if(!rownames){
+      cbind(var = rownames(unlist(r1)), data.frame(unlist(r1), row.names=NULL))
+      } else {
+      unlist(r1)
+    }
   } else if (typeof(x) == "list") {
     x_num <- Filter(is.numeric, x)
     if(!identical(x, x_num)) warning("Character columns or list elements removed")
     result <- lapply(funs, mapply, x_num)
     list_res <- lapply(result, function(y) round(y, digits = dec))
-    data.frame(list_res)
+    if(!rownames){
+      cbind(var = rownames(data.frame(list_res)), data.frame(data.frame(list_res), row.names=NULL))
+    } else {
+      data.frame(list_res)
+    }
+
   }
 }
 
