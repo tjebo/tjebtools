@@ -49,6 +49,8 @@ count_pateyes <- function(data, id = NULL, eye = NULL, text = FALSE){
 #' @export
 
 get_age <- function(from_date, to_date = lubridate::now(), period = FALSE){
+  if(!require('lubridate'))
+    stop('Please install the lubridate package')
   if(is.character(from_date)) from_date <- lubridate::as_date(from_date)
   if(is.character(to_date))   to_date   <- lubridate::as_date(to_date)
   if (period) { age <- lubridate::year(lubridate::as.period(lubridate::interval(start = from_date, end = to_date)))
@@ -68,6 +70,8 @@ get_age <- function(from_date, to_date = lubridate::now(), period = FALSE){
 #' @export
 
 show_stats <- function(x, dec = 1) {
+  if(!require('purrr'))
+    stop('Please install the purrr package')
   funs <- list(
     mean = purrr::partial(mean, na.rm = T),
     sd = purrr::partial(sd, na.rm = T),
@@ -97,7 +101,6 @@ show_stats <- function(x, dec = 1) {
 #'
 #' @description Takes vector of dates and outputs floor or ceiling date of the respective week.
 #' The end of week can be defined. The output can be used e.g. for zoo aggregation
-#' @import zoo
 #' @param x Vector of dates Dataframe in which the vectors are found
 #' @param week_end what's the end of week? Takes english names of weekdays as quoted string, capital letters allowed
 #' @param ceiling default TRUE: last day of the week for each weekend. if FALSE, first day of week
@@ -105,6 +108,8 @@ show_stats <- function(x, dec = 1) {
 #' @export
 
 weekly <- function(x, week_end = 'sunday', ceiling = TRUE) {
+  if(!require('zoo'))
+    stop('Please install the zoo package')
   week_end <- tolower(week_end)
   days.of.week <- tolower(weekdays(as.Date(3,"1970-01-01",tz="GMT") + 0:6))
   if(ceiling) {
