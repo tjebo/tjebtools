@@ -13,11 +13,11 @@ theme_tjebo <- function (base_size = 10, base_family = "", base_line_size = base
   theme_bw(base_size = base_size, base_family = base_family,
            base_line_size = base_line_size, base_rect_size = base_rect_size) %+replace%
     theme(panel.border = element_blank(),
+          panel.background = element_blank(),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          strip.background = element_blank(),
-          panel.background = element_blank(),
           plot.background = element_blank(),
+          strip.background = element_blank(),
           legend.background = element_blank(),
           legend.key = element_blank(),
           plot.title = element_text(hjust = 0.5, size = rel(1)),
