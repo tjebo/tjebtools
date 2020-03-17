@@ -22,5 +22,8 @@ theme_tjebo <- function (base_size = 10, base_family = "", base_line_size = base
           legend.key = element_blank(),
           plot.title = element_text(hjust = 0.5, size = rel(1)),
           axis.line = element_line(colour = "black", size = rel(1)),
+          axis.text = element_text(size = rel(0.8)),
+          legend.text = element_text(size = rel(0.8)),
+          legend.key.size = unit(0.8*base_size,'pt'),
           complete = TRUE)
 }
