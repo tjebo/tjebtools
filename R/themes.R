@@ -8,8 +8,8 @@
 #' @param base_rect_size base size for rect elements
 #'
 #' @export
-theme_tjebo <- function (base_size = 10, base_family = "", base_line_size = base_size/22,
-                         base_rect_size = base_size/22) {
+theme_tjebo <- function (base_size = 10, base_family = "", base_line_size = base_size/30,
+                         base_rect_size = base_size/30) {
   theme_bw(base_size = base_size, base_family = base_family,
            base_line_size = base_line_size, base_rect_size = base_rect_size) %+replace%
     theme(panel.border = element_blank(),
