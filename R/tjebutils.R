@@ -33,7 +33,7 @@ count_pateyes <- function(data, id = NULL, eye = NULL, text = FALSE){
   n_eyes <- length(unique(interaction(x[[pat_col]], x[[eye_col]])))
 
   if(text == TRUE){
-    return(paste(deparse(substitute(data)), ':', n_eyes, 'eyes of', n_pat, 'patients'))
+    return(paste(n_eyes, 'eyes of', n_pat, 'patients'))
 
   }
   return(c(Patients = n_pat, Eyes = n_eyes))
