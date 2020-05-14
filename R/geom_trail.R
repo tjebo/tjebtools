@@ -1,13 +1,13 @@
-#' geom_pointpath
-#' @author SO::teunbrand
-#' @rdname ggpmisc-ggproto
+#' geom_trail
+#' @author Teun van den Brand
+#' @rdname geom_trail
 #' @format NULL
 #' @usage NULL
 #' @import grid
 #' @export
 
-GeomPointPath <- ggplot2::ggproto(
-  "GeomPointPath", ggplot2::GeomPoint,
+GeomTrail <- ggplot2::ggproto(
+  "GeomTrail", ggplot2::GeomPoint,
   draw_panel = function(data, panel_params, coord, na.rm = FALSE){
 
     # Default geom point behaviour
@@ -33,42 +33,42 @@ GeomPointPath <- ggplot2::ggproto(
     my_path <- grob(
       x = x,
       y = y,
-      mult = (coords$size * .pt + coords$stroke * .stroke/2) * coords$mult,
-      name = "pointpath",
+      mult =  coords$gap * .pt,
+      name = "trail",
       gp = grid::gpar(
         col = alpha(coords$colour, coords$alpha),
         fill = alpha(coords$colour, coords$alpha),
-        lwd = (coords$linesize * .pt),
+        lwd = coords$linesize * .pt,
         lty = coords$linetype,
         lineend = "butt",
         linejoin = "round", linemitre = 10
       ),
       vp = NULL,
       ### Now this is the important bit:
-      cl = 'pointpath'
+      cl = 'trail'
     )
 
     ## Combine grobs
     ggplot2:::ggname(
-      "geom_pointpath",
+      "geom_trail",
       grid::grobTree(my_path, my_points)
     )
   },
-  # Adding some defaults for lines and mult
-  default_aes = ggplot2::aes(
+  # Adding some defaults for lines and gap
+  default_aes = aes(
     shape = 19, colour = "black", size = 1.5, fill = NA, alpha = NA, stroke = 0.5,
-    linesize = 0.5, linetype = 1, mult = 0.5
+    linesize = 0.5, linetype = 1, gap = .9,
   )
 )
 
-#' makeContent.pointpath
-#' @description underlying function for geom_type_b
-#' @author SO::teunbrand
-#'
+#' makeContent.trail
+#' @description underlying drawing method for paths in geom_trail
+#' @author Teun van den Brand
 #' @import ggplot2
+#' @param x object passed to method
 #' @export
 
-makeContent.pointpath <- function(x){
+makeContent.trail <- function(x){
   # Make hook for drawing
   # Convert npcs to absolute units
   x_new <- convertX(x$x, "mm", TRUE)
@@ -105,12 +105,38 @@ makeContent.pointpath <- function(x){
   x
 }
 
-#' geom_pointpath
-#' @description makes point and line plot just as plot type = b
+#' geom_trail
+#' @description Mark your trail with a plot just like the good old base plot type = b
+#' @rdname geom_trail
 #' @import ggplot2
+#' @inheritParams ggplot2::geom_point
+#' @param gap gap between points and lines
+#' @section Aesthetics:
+#' \code{geom_trail} understands the following aesthetics (required aesthetics
+#' are in bold):
+#' \itemize{
+#'   \item **`x`**
+#'   \item **`y`**
+#'   \item \code{alpha}
+#'   \item \code{color}
+#'   \item \code{linetype}
+#'   \item \code{size} size of points -
+#'   also used for calculation of empty space
+#'   \item \code{linesize}
+#' }
+#' @examples
+#' ggplot(pressure, aes(temperature, pressure)) +
+#'   geom_ribbon(aes(ymin = pressure - 50, ymax = pressure + 50), alpha = 0.2) +
+#'   geom_trail()
 #' @export
 
-geom_pointpath <- function(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
-  layer(data = data, mapping = mapping, stat = stat, geom = GeomPointPath, position = position, show.legend = show.legend, inherit.aes = inherit.aes, params = list(na.rm = na.rm, ...))
+geom_trail <-
+  function(mapping = NULL, data = NULL, stat = "identity",
+           position = "identity", na.rm = FALSE,
+           show.legend = NA, inherit.aes = TRUE, ...) {
+    layer(data = data, mapping = mapping, stat = stat,
+          geom = GeomTrail, position = position, show.legend = show.legend,
+          inherit.aes = inherit.aes,
+          params = list(na.rm = na.rm, ...))
 }
 
