@@ -18,8 +18,12 @@
 #' foo3 <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("e","l"))
 #' set.seed(42)
 #' foo4 <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le"))
-#'
-#' map(map(paste0("foo", 1:4), get), function(x) try(eyes(x)))
+#' foo5 <- data.frame(patient= c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le"))
+#' foo6 <- data.frame(patient= c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le", "re", "le"))
+#' foo7 <- data.frame(patient= c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le"), patience = 'c')
+#' foo8 <- data.frame(patient= c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le", "re", "os"))
+
+#' map(map(paste0("foo", 1:8), get), function(x) try(eyes(x)))
 #' @export
 #'
 eyes <- function(data, id = NULL, eye = NULL, text = FALSE) {
@@ -52,15 +56,35 @@ eyes <- function(data, id = NULL, eye = NULL, text = FALSE) {
   n_pat <- length(unique(x[[pat_col]]))
 
   if (length(eye_col) == 1) {
-
-    if(!all(tolower(unique(x[[eye_col]])) %in% c(NA, "r","l", "re","le","od","os")))
-      stop("Eyes contain unclear categories.
-           Must be \"r\", \"l\", \"re\", \"le\", \"od\", \"os\" - ignore cases!", call. = FALSE)
-    eye_tab <- table(unique(x[,c(pat_col,eye_col)]))
+    if (!all(tolower(unique(x[[eye_col]])) %in% c(NA, "r", "l", "re", "le", "od", "os"))) {
+      stop("Eyes not coded clearly.
+          Must be either of c(\"r\", \"l\", \"re\", \"le\", \"od\", \"os\") - any cases allowed!", call. = FALSE)
+    }
+    if (sum(is.na(x[[eye_col]]) > 0)) {
+      warning("There are observations where the eyes are not identified (NA)", call. = FALSE)
+    }
+    eye_tab <- table(unique(x[, c(pat_col, eye_col)]))
     n_eyes <- sum(colSums(eye_tab))
-    tab_r <- eye_tab[, tolower(colnames(eye_tab)) %in% c("r","re","od"), drop = FALSE]
+    tab_r <- eye_tab[, tolower(colnames(eye_tab)) %in% c("r", "re", "od"), drop = FALSE]
+    if (ncol(tab_r) > 1) {
+      warning(paste0(
+        "Found several ways to code for right eyes (",
+        paste(colnames(tab_r), collapse = ","), ") - suggest clean your data"
+      ),
+      call. = FALSE
+      )
+    }
     n_r <- sum(colSums(tab_r))
-    tab_l <- eye_tab[, tolower(colnames(eye_tab)) %in% c("l","le","os"), drop = FALSE]
+    tab_l <- eye_tab[, tolower(colnames(eye_tab)) %in% c("l", "le", "os"), drop = FALSE]
+    if (ncol(tab_l) > 1) {
+      warning(paste0(
+        "Found several ways to code for left eyes (",
+        paste(colnames(tab_l), collapse = ","), ") - suggest clean your data"
+      ),
+      call. = FALSE
+      )
+    }
+
     n_l <- sum(colSums(tab_l))
 
     if (text) {
@@ -382,3 +406,58 @@ csv <- function(x, name = deparse(substitute(x))) {
   write.csv(x, file, row.names = F)
 }
 
+#' Probability contours
+#' @description calculates 2d probability contours for use in ggplot2
+#' @name prob_contour
+#' @param x data frame with two columns (x and y coordinates)
+#' @param name Filename. Default: Name of dataframe to save as csv. Or character string (.csv extension added automatically)
+#' @export
+#' @examples
+#'
+#' set.seed(1)
+#' n=100
+#' foo <- data.frame(x=rnorm(n, 0, 1), y=rnorm(n, 0, 1))
+#'
+#' df_contours <- dplyr::bind_rows(
+#'   purrr::map(seq(0.2, 0.8, 0.2), function(p) prob_contour(foo, prob = p))
+#' )
+#'
+#' ggplot() +
+#'   stat_density_2d(data = foo, aes(x, y), bins = 5, color = "black") +
+#'   geom_point(data = foo, aes(x = x, y = y)) +
+#'   geom_polygon(data = df_contours, aes(x = x, y = y, color = prob), fill = NA) +
+#'   scale_color_brewer(name = "Probs", palette = "Set1")
+
+prob_contour <- function(data, x = NULL, y = NULL, n = 50, prob = 0.95, ...) {
+  if (ncol(data) > 2 & missing(x) & missing(y)) {
+    warning("Data frame has more than two columns. Default to first two columns", call. = FALSE)
+  } else if (ncol(data) > 2 & missing(x)) {
+    warning("Data frame has more than two columns and x not specified.
+            Default x to column 1", call. = FALSE)
+  } else if (ncol(data) > 2 & missing(y)) {
+    warning("Data frame has more than two columns and y not specified.
+            Default y to column 2", call. = FALSE)
+  }
+
+  if (missing(x)) x <- 1L
+  if (missing(y)) y <- 2L
+
+  post1 <- MASS::kde2d(data[[x]], data[[y]], n = n, ...)
+
+  dx <- diff(post1$x[1:2])
+  dy <- diff(post1$y[1:2])
+  sz <- sort(post1$z)
+  c1 <- cumsum(sz) * dx * dy
+
+  levels <- sapply(prob, function(x) {
+    approx(c1, sz, xout = 1 - x)$y
+  })
+
+  df <- as.data.frame(grDevices::contourLines(post1$x, post1$y, post1$z, levels = levels))
+  df$x <- round(df$x, 3)
+  df$y <- round(df$y, 3)
+  df$level <- round(df$level, 2)
+  df$prob <- as.character(prob)
+
+  df
+}
