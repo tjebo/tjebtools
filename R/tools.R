@@ -9,6 +9,17 @@
 #' set.seed(42)
 #' foo <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("r","l"))
 #' eyes(foo)
+#'
+#' set.seed(42)
+#' foo1 <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c(NA,"l"))
+#' set.seed(42)
+#' foo2<- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("r","l"))
+#' set.seed(42)
+#' foo3 <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("e","l"))
+#' set.seed(42)
+#' foo4 <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le"))
+#'
+#' map(map(paste0("foo", 1:4), get), function(x) try(eyes(x)))
 #' @export
 #'
 eyes <- function(data, id = NULL, eye = NULL, text = FALSE) {

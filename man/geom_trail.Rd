@@ -90,6 +90,6 @@ ggplot(pressure, aes(temperature, pressure)) +
   geom_trail()
 }
 \author{
-Teun van den Brand
+Teun van den Brand / Tjebo Heeren
 }
 \keyword{datasets}

@@ -7,7 +7,7 @@
 \method{makeContent}{trail}(x)
 }
 \arguments{
-\item{x}{object passed to method}
+\item{x}{grob object passed to method}
 }
 \description{
 underlying drawing method for paths in geom_trail

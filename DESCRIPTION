@@ -1,7 +1,7 @@
 Package: tjebtools
 Type: Package
 Title: My utilities
-Version: 1.0
+Version: 0.0.0.9000
 Author: Tjebo - with inspiration by a lot of stackoverflow users. 
 Maintainer: Tjebo Heeren <tjebn@web.de>
 Description: Some more or less useful functions which help me in my day to day work

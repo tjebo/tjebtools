@@ -1,5 +1,5 @@
 #' geom_trail
-#' @author Teun van den Brand
+#' @author Teun van den Brand / Tjebo Heeren
 #' @rdname geom_trail
 #' @format NULL
 #' @usage NULL
@@ -15,7 +15,11 @@ GeomTrail <- ggplot2::ggproto(
       data$shape <- translate_shape_string(data$shape)
     }
     coords <- coord$transform(data, panel_params)
-    my_points <- pointsGrob(
+
+    if(unique(coords$size == 0)) {
+      my_points <- NULL
+    } else {
+      my_points <- pointsGrob(
       coords$x,
       coords$y,
       pch = coords$shape,
@@ -23,7 +27,7 @@ GeomTrail <- ggplot2::ggproto(
                 fill = alpha(coords$fill, coords$alpha),
                 fontsize = coords$size * .pt + coords$stroke * .stroke/2,
                 lwd = coords$stroke * .stroke/2))
-
+    }
     # New behaviour
     ## Convert x and y to units
     x <- unit(coords$x, "npc")
@@ -64,8 +68,8 @@ GeomTrail <- ggplot2::ggproto(
 #' makeContent.trail
 #' @description underlying drawing method for paths in geom_trail
 #' @author Teun van den Brand
-#' @import ggplot2
-#' @param x object passed to method
+#' @import grid
+#' @param x grob object passed to method
 #' @export
 
 makeContent.trail <- function(x){
