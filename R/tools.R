@@ -409,8 +409,12 @@ csv <- function(x, name = deparse(substitute(x))) {
 #' Probability contours
 #' @description calculates 2d probability contours for use in ggplot2
 #' @name prob_contour
-#' @param x data frame with two columns (x and y coordinates)
-#' @param name Filename. Default: Name of dataframe to save as csv. Or character string (.csv extension added automatically)
+#' @param data data frame x and y coordinates
+#' @param x column with x coordinates (default first column)
+#' @param y column with y coordinates (default second column)
+#' @param prob probability to be estimated
+#' @param n passed to [MASS::kde2d]
+#' @param ... further parameters passed to [MASS::kde2d]
 #' @export
 #' @examples
 #'

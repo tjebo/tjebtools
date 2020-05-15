@@ -7,9 +7,17 @@
 prob_contour(data, x = NULL, y = NULL, n = 50, prob = 0.95, ...)
 }
 \arguments{
-\item{x}{data frame with two columns (x and y coordinates)}
+\item{data}{data frame x and y coordinates}
 
-\item{name}{Filename. Default: Name of dataframe to save as csv. Or character string (.csv extension added automatically)}
+\item{x}{column with x coordinates (default first column)}
+
+\item{y}{column with y coordinates (default second column)}
+
+\item{n}{passed to \link[MASS:kde2d]{MASS::kde2d}}
+
+\item{prob}{probability to be estimated}
+
+\item{...}{further parameters passed to \link[MASS:kde2d]{MASS::kde2d}}
 }
 \description{
 calculates 2d probability contours for use in ggplot2
