@@ -1,44 +1,75 @@
-#' count_pateyes
-#' @name count_pateyes
+#' eyes
+#' @name eyes
 #' @description Looks for columns that identify patients and eyes and counts number of patients and eyes.
-
 #' @param date dataframe where patient / eye information is included.
 #' @param id id column. If not specified, automatically selected. In this case, the patient ID column name needs to contain the strings "pat" OR "id" ignore.case = TRUE.
 #' @param eye eye colum. If not specified, automatically selected, in which case the eye column name needs to contain the string "eye" ignore.case = TRUE
 #' @param text default = FALSE (TRUE will return text which can be pasted for example into a markdown document). As default a named vector will be returned
+#' @examples
+#' set.seed(42)
+#' foo <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("r","l"))
+#' eyes(foo)
 #' @export
 #'
-count_pateyes <- function(data, id = NULL, eye = NULL, text = FALSE){
-
+eyes <- function(data, id = NULL, eye = NULL, text = FALSE) {
   x <- eval(data)
 
-  if(missing(id)) {
-    pat_col <- names(x)[grepl('pat|id', names(x), ignore.case = TRUE)]
+  if (missing(id)) {
+    pat_col <- names(x)[grepl("pat|id", names(x), ignore.case = TRUE)]
   } else {
-    pat_col <- deparse(substitute(id))
+    pat_col <- id
   }
-  if(missing(eye)) {
-    eye_col <- names(x)[grepl('eye', names(x), ignore.case = TRUE, perl = TRUE)]
-  } else {
-    eye_col <- deparse(substitute(eye))
-  }
-  #return(length(eye_col))
-  if(length(eye_col) < 1 | length(pat_col) < 1 )
-    stop("Patient and/or eye column(s) are missing.\n The patient ID column name needs to contain either of or both strings \"pat\" and \"ID\" at any location.\n The eye column name needs to contain the string \"eye\" (for both columns ignore.case = TRUE)")
 
-  if(length(eye_col) > 1 | length(pat_col) > 1 )
+  if (missing(eye)) {
+    eye_col <- names(x)[grepl("eye", names(x), ignore.case = TRUE, perl = TRUE)]
+  } else {
+    eye_col <- eye
+  }
+
+  if (length(eye_col) < 1 | identical(eye_col, character(0))) {
+    warning("No eye column found in data nor specified: No eye count.", call. = FALSE)
+  }
+
+  if (length(pat_col) < 1) {
+    stop("Patient and/or eye column(s) are missing.\n The patient ID column name needs to contain either of or both strings \"pat\" and \"ID\" at any location.\n The eye column name needs to contain the string \"eye\" (for both columns ignore.case = TRUE)")
+  }
+
+  if (length(eye_col) > 1 | length(pat_col) > 1) {
     stop("Patient and/or eye column(s) are not uniquely identified.")
+  }
 
   n_pat <- length(unique(x[[pat_col]]))
-  n_eyes <- length(unique(interaction(x[[pat_col]], x[[eye_col]])))
 
-  if(text == TRUE){
-    return(paste(n_eyes, 'eyes of', n_pat, 'patients'))
+  if (length(eye_col) == 1) {
 
+    if(!all(tolower(unique(x[[eye_col]])) %in% c(NA, "r","l", "re","le","od","os")))
+      stop("Eyes contain unclear categories.
+           Must be \"r\", \"l\", \"re\", \"le\", \"od\", \"os\" - ignore cases!", call. = FALSE)
+    eye_tab <- table(unique(x[,c(pat_col,eye_col)]))
+    n_eyes <- sum(colSums(eye_tab))
+    tab_r <- eye_tab[, tolower(colnames(eye_tab)) %in% c("r","re","od"), drop = FALSE]
+    n_r <- sum(colSums(tab_r))
+    tab_l <- eye_tab[, tolower(colnames(eye_tab)) %in% c("l","le","os"), drop = FALSE]
+    n_l <- sum(colSums(tab_l))
+
+    if (text) {
+      return(paste(n_eyes, "eyes of", n_pat, "patients"))
+    }
+    return(c(patients = n_pat, eyes = n_eyes, right = n_r, left = n_l))
+  } else {
+    return(c(patients = n_pat))
   }
-  return(c(Patients = n_pat, Eyes = n_eyes))
 }
 
+#' count_eyes
+#' @rdname eyes
+#' @export
+counteyes <- eyes
+
+#' count_eyes
+#' @rdname eyes
+#' @export
+count_eyes <- eyes
 
 #' get_age
 #' @author SO::Moody_Mudskipper, mildly modified
