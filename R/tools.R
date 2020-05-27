@@ -196,17 +196,23 @@ show_stats <- function(x, dec = 1, rownames = TRUE) {
 #' @return vector of dates. can be used in aggregations, e.g. with zoo.aggregate
 #' @export
 
-weekly <- function(x, week_end = 'sunday', ceiling = TRUE) {
-  if(!require('zoo'))
-    stop('Please install the zoo package')
+weekly <- function(x, week_end = "sunday", ceiling = TRUE) {
   week_end <- tolower(week_end)
-  days.of.week <- tolower(weekdays(as.Date(3,"1970-01-01",tz="GMT") + 0:6))
-  if(ceiling) {
-    index = which(days.of.week == week_end)-1
-    vec <- 7 * ceiling(as.numeric(x - index + 4)/7) + zoo::as.Date(index - 4)
-  vec
-  } else {index = which(days.of.week == week_end)
-  vec <- 7 * floor(as.numeric(x - index + 4)/7) + zoo::as.Date(index - 4)}
+  days.of.week <- tolower(weekdays(base::as.Date(3,
+    origin = "1970-01-01",
+    tz = "GMT"
+  ) + 0:6))
+  if (ceiling) {
+    index <- which(days.of.week == week_end) - 1
+    vec <- 7 * ceiling(as.numeric(x - index + 4) / 7) + base::as.Date(index -
+      4, origin = "1970-01-01")
+    vec
+  }
+  else {
+    index <- which(days.of.week == week_end)
+    vec <- 7 * floor(as.numeric(x - index + 4) / 7) + base::as.Date(index -
+      4, origin = "1970-01-01")
+  }
   vec
 }
 
@@ -349,7 +355,8 @@ every_nth <- function(x, nth, empty = TRUE, inverse = FALSE)
 #' @name anonymize
 #' @aliases anonymise
 #' @description The function will anonymize your data
-#' @author With the help of Stackoverflow Etienne Low-Décarie and G.Simpson, modified
+#' @author Modified from [this](https://stackoverflow.com/a/10455729/7941188) and [this](https://stackoverflow.com/a/10458688/7941188)
+#' post on Stackoverflow from user Etienne Low-Décarie and Gavin Simpson
 #' @param df data frame to anonymise
 #' @param simple_names logical, column names will be converted to letters. If FALSE, colString will be used for renaming
 #' @param replace_rownames if TRUE, replacement with string from rowString argument
@@ -407,7 +414,8 @@ csv <- function(x, name = deparse(substitute(x))) {
 }
 
 #' Probability contours
-#' @description calculates 2d probability contours for use in ggplot2
+#' @description calculates 2d probability contours for use in ggplot2.
+#' Modified from [this post](https://stackoverflow.com/a/59173290/7941188) by user crsh
 #' @name prob_contour
 #' @param data data frame x and y coordinates
 #' @param x column with x coordinates (default first column)
@@ -415,9 +423,11 @@ csv <- function(x, name = deparse(substitute(x))) {
 #' @param prob probability to be estimated
 #' @param n passed to [MASS::kde2d]
 #' @param ... further parameters passed to [MASS::kde2d]
+#' @family stats functions
 #' @export
 #' @examples
 #'
+#' library(ggplot2)
 #' set.seed(1)
 #' n=100
 #' foo <- data.frame(x=rnorm(n, 0, 1), y=rnorm(n, 0, 1))
@@ -427,7 +437,6 @@ csv <- function(x, name = deparse(substitute(x))) {
 #' )
 #'
 #' ggplot() +
-#'   stat_density_2d(data = foo, aes(x, y), bins = 5, color = "black") +
 #'   geom_point(data = foo, aes(x = x, y = y)) +
 #'   geom_polygon(data = df_contours, aes(x = x, y = y, color = prob), fill = NA) +
 #'   scale_color_brewer(name = "Probs", palette = "Set1")

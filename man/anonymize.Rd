@@ -35,5 +35,6 @@ Data frame
 The function will anonymize your data
 }
 \author{
-With the help of Stackoverflow Etienne Low-Décarie and G.Simpson, modified
+Modified from \href{https://stackoverflow.com/a/10455729/7941188}{this} and \href{https://stackoverflow.com/a/10458688/7941188}{this}
+post on Stackoverflow from user Etienne Low-Décarie and Gavin Simpson
 }
