@@ -1,188 +1,3 @@
-#' eyes
-#' @name eyes
-#' @description Looks for columns that identify patients and eyes and counts number of patients and eyes.
-#' @param date dataframe where patient / eye information is included.
-#' @param id id column. If not specified, automatically selected. In this case, the patient ID column name needs to contain the strings "pat" OR "id" ignore.case = TRUE.
-#' @param eye eye colum. If not specified, automatically selected, in which case the eye column name needs to contain the string "eye" ignore.case = TRUE
-#' @param text default = FALSE (TRUE will return text which can be pasted for example into a markdown document). As default a named vector will be returned
-#' @examples
-#' set.seed(42)
-#' foo <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("r","l"))
-#' eyes(foo)
-#'
-#' set.seed(42)
-#' foo1 <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c(NA,"l"))
-#' set.seed(42)
-#' foo2<- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("r","l"))
-#' set.seed(42)
-#' foo3 <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("e","l"))
-#' set.seed(42)
-#' foo4 <- data.frame(id = c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le"))
-#' foo5 <- data.frame(patient= c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le"))
-#' foo6 <- data.frame(patient= c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le", "re", "le"))
-#' foo7 <- data.frame(patient= c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le"), patience = 'c')
-#' foo8 <- data.frame(patient= c(letters[sample(10)], letters[sample(10)] ), eyes = c("od","le", "re", "os"))
-
-#' map(map(paste0("foo", 1:8), get), function(x) try(eyes(x)))
-#' @export
-#'
-eyes <- function(data, id = NULL, eye = NULL, text = FALSE) {
-  x <- eval(data)
-
-  if (missing(id)) {
-    pat_col <- names(x)[grepl("pat|id", names(x), ignore.case = TRUE)]
-  } else {
-    pat_col <- id
-  }
-
-  if (missing(eye)) {
-    eye_col <- names(x)[grepl("eye", names(x), ignore.case = TRUE, perl = TRUE)]
-  } else {
-    eye_col <- eye
-  }
-
-  if (length(eye_col) < 1 | identical(eye_col, character(0))) {
-    warning("No eye column found in data nor specified: No eye count.", call. = FALSE)
-  }
-
-  if (length(pat_col) < 1) {
-    stop("Patient and/or eye column(s) are missing.\n The patient ID column name needs to contain either of or both strings \"pat\" and \"ID\" at any location.\n The eye column name needs to contain the string \"eye\" (for both columns ignore.case = TRUE)")
-  }
-
-  if (length(eye_col) > 1 | length(pat_col) > 1) {
-    stop("Patient and/or eye column(s) are not uniquely identified.")
-  }
-
-  n_pat <- length(unique(x[[pat_col]]))
-
-  if (length(eye_col) == 1) {
-    if (!all(tolower(unique(x[[eye_col]])) %in% c(NA, "r", "l", "re", "le", "od", "os"))) {
-      stop("Eyes not coded clearly.
-          Must be either of c(\"r\", \"l\", \"re\", \"le\", \"od\", \"os\") - any cases allowed!", call. = FALSE)
-    }
-    if (sum(is.na(x[[eye_col]]) > 0)) {
-      warning("There are observations where the eyes are not identified (NA)", call. = FALSE)
-    }
-    eye_tab <- table(unique(x[, c(pat_col, eye_col)]))
-    n_eyes <- sum(colSums(eye_tab))
-    tab_r <- eye_tab[, tolower(colnames(eye_tab)) %in% c("r", "re", "od"), drop = FALSE]
-    if (ncol(tab_r) > 1) {
-      warning(paste0(
-        "Found several ways to code for right eyes (",
-        paste(colnames(tab_r), collapse = ","), ") - suggest clean your data"
-      ),
-      call. = FALSE
-      )
-    }
-    n_r <- sum(colSums(tab_r))
-    tab_l <- eye_tab[, tolower(colnames(eye_tab)) %in% c("l", "le", "os"), drop = FALSE]
-    if (ncol(tab_l) > 1) {
-      warning(paste0(
-        "Found several ways to code for left eyes (",
-        paste(colnames(tab_l), collapse = ","), ") - suggest clean your data"
-      ),
-      call. = FALSE
-      )
-    }
-
-    n_l <- sum(colSums(tab_l))
-
-    if (text) {
-      return(paste(n_eyes, "eyes of", n_pat, "patients"))
-    }
-    return(c(patients = n_pat, eyes = n_eyes, right = n_r, left = n_l))
-  } else {
-    return(c(patients = n_pat))
-  }
-}
-
-#' count_eyes
-#' @rdname eyes
-#' @export
-counteyes <- eyes
-
-#' count_eyes
-#' @rdname eyes
-#' @export
-count_eyes <- eyes
-
-#' get_age
-#' @author SO::Moody_Mudskipper, mildly modified
-#' @description calculates age in years, either as duration or as period
-#' @param from_date start date
-#' @param to_date end date
-#' @param period default FALSE: output as a duration. If TRUE, output as a period
-#' @export
-
-get_age <- function(from_date, to_date = lubridate::now(), period = FALSE){
-  if(!require('lubridate'))
-    stop('Please install the lubridate package')
-  if(is.character(from_date)) from_date <- lubridate::as_date(from_date)
-  if(is.character(to_date))   to_date   <- lubridate::as_date(to_date)
-  if (period) { age <- lubridate::year(lubridate::as.period(lubridate::interval(start = from_date, end = to_date)))
-  age
-  } else { age <- lubridate::interval(start = from_date, end = to_date)/lubridate::dyears(1)
-  age
-  }
-}
-
-
-#' show_stats
-#'
-#' @description pulls the most commonly used summary statistics
-#' @param x either vector or list of vectors. Data frames supported. Character list elements (or columns) are removed!!
-#' @param dec how many decimals are displayed
-#' @param rownames logical. if FALSE, column with variable names will be created
-#' @return named vector (for vector) or data frame (for list)
-#' @examples
-#' x = y = z = c(rnorm(20), NA)
-#'
-#' # named or unnamed list
-#' mylist <- list(x = x, y = y, z = z)
-#' show_stats(mylist)
-#' # with a data frame
-#' mydf <- data.frame(x, y, z)
-#' show_stats(mydf)
-#' #If aggregation by group, split the data frame first
-#' mydf2 <- data.frame(group = rep(letters[1:2], each = 42), x, y, z)
-#' lapply(split(mydf2, mydf2$group), show_stats, rownames = FALSE)
-#' @export
-
-show_stats <- function(x, dec = 1, rownames = TRUE) {
-  if(!require('purrr'))
-    stop('Please install the purrr package')
-  funs <- list(
-    mean = purrr::partial(mean, na.rm = T),
-    sd = purrr::partial(sd, na.rm = T),
-    n = length,
-    median = purrr::partial(median, na.rm = TRUE),
-    min = purrr::partial(min, na.rm = TRUE),
-    max = purrr::partial(max, na.rm = TRUE)
-  )
-
-  if (is.atomic(x) == TRUE) {
-    r1 <- lapply(funs, function(f) f(x))
-
-    if(!rownames){
-      cbind(var = rownames(unlist(r1)), data.frame(unlist(r1), row.names=NULL))
-      } else {
-      unlist(r1)
-    }
-  } else if (typeof(x) == "list") {
-    x_num <- Filter(is.numeric, x)
-    if(!identical(x, x_num)) warning("Character columns or list elements removed")
-    result <- lapply(funs, mapply, x_num)
-    list_res <- lapply(result, function(y) round(y, digits = dec))
-    if(!rownames){
-      cbind(var = rownames(data.frame(list_res)), data.frame(data.frame(list_res), row.names=NULL))
-    } else {
-      data.frame(list_res)
-    }
-
-  }
-}
-
-
 #' weekly
 #'
 #' @author tjebo - eclectic choice of functions, mainly with the help of SO::G.Grothendieck and SO::Joshua Ulrich
@@ -401,16 +216,27 @@ anonymize <- function(df, simple_names = TRUE, replace_rownames = FALSE, colStri
 #' @export
 anonymise <- anonymize
 
+
 #' csv
-#' @description wrapper around write.csv with default 'row.names = FALSE'
+#' @description wrapper around write.csv with default 'row.names = FALSE'.
+#' Will use the name of the data frame for the generated .csv file.
 #' @name csv
 #' @param x data frame
-#' @param name Filename. Default: Name of dataframe to save as csv. Or character string (.csv extension added automatically)
+#' @param name Filename (Default: Name of dataframe). If provided,
+#'  character string (.csv extension added automatically)
+#' @family convenience functions
+#' @return No return value, called for side effects (saving file)
+#' @examples
+#' \dontrun{
+#' csv(amd)
+#' }
 #' @export
-
-csv <- function(x, name = deparse(substitute(x))) {
+csv <- function(x, name = NULL) {
+  if(is.null(name)){
+    name <- deparse(substitute(x))
+  }
   file = paste0(name, '.csv')
-  write.csv(x, file, row.names = F)
+  utils::write.csv(x, file, row.names = F)
 }
 
 #' Probability contours

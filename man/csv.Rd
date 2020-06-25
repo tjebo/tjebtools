@@ -4,13 +4,24 @@
 \alias{csv}
 \title{csv}
 \usage{
-csv(x, name = deparse(substitute(x)))
+csv(x, name = NULL)
 }
 \arguments{
 \item{x}{data frame}
 
-\item{name}{Filename. Default: Name of dataframe to save as csv. Or character string (.csv extension added automatically)}
+\item{name}{Filename (Default: Name of dataframe). If provided,
+character string (.csv extension added automatically)}
+}
+\value{
+No return value, called for side effects (saving file)
 }
 \description{
-wrapper around write.csv with default 'row.names = FALSE'
+wrapper around write.csv with default 'row.names = FALSE'.
+Will use the name of the data frame for the generated .csv file.
 }
+\examples{
+\dontrun{
+csv(amd)
+}
+}
+\concept{convenience functions}
