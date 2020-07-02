@@ -281,22 +281,20 @@ prob_contour <- function(data, x = NULL, y = NULL, n = 50, prob = 0.95, ...) {
   if (missing(x)) x <- 1L
   if (missing(y)) y <- 2L
 
-  post1 <- MASS::kde2d(data[[x]], data[[y]], n = n, ...)
+    post1 <- MASS::kde2d(data[[x]], data[[y]], n = n, ...)
+    dx <- diff(post1$x[1:2])
+    dy <- diff(post1$y[1:2])
+    sz <- sort(post1$z)
+    c1 <- cumsum(sz) * dx * dy
+    levels <- sapply(prob, function(x) {
+      approx(c1, sz, xout = 1 - x)$y
+    })
+    df <- as.data.frame(
+      grDevices::contourLines(post1$x, post1$y, post1$z, levels = levels)[[1]])
+    df$x <- round(as.numeric(df$x), 3)
+    df$y <- round(as.numeric(df$y), 3)
+    df$level <- round(as.numeric(df$level), 2)
+    df$prob <- rep(as.character(prob), nrow(df))
 
-  dx <- diff(post1$x[1:2])
-  dy <- diff(post1$y[1:2])
-  sz <- sort(post1$z)
-  c1 <- cumsum(sz) * dx * dy
-
-  levels <- sapply(prob, function(x) {
-    approx(c1, sz, xout = 1 - x)$y
-  })
-
-  df <- as.data.frame(grDevices::contourLines(post1$x, post1$y, post1$z, levels = levels))
-  df$x <- round(as.numeric(df$x), 3)
-  df$y <- round(as.numeric(df$y), 3)
-  df$level <- round(as.numeric(df$level), 2)
-  df$prob <- rep(as.character(prob), nrow(df))
-
-  df
-}
+    df
+  }
