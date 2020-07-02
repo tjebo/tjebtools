@@ -293,10 +293,10 @@ prob_contour <- function(data, x = NULL, y = NULL, n = 50, prob = 0.95, ...) {
   })
 
   df <- as.data.frame(grDevices::contourLines(post1$x, post1$y, post1$z, levels = levels))
-  df$x <- round(df$x, 3)
-  df$y <- round(df$y, 3)
-  df$level <- round(df$level, 2)
-  df$prob <- as.character(prob)
+  df$x <- round(as.numeric(df$x), 3)
+  df$y <- round(as.numeric(df$y), 3)
+  df$level <- round(as.numeric(df$level), 2)
+  df$prob <- rep(as.character(prob), nrow(df))
 
   df
 }
