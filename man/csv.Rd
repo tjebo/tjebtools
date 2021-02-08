@@ -24,4 +24,8 @@ Will use the name of the data frame for the generated .csv file.
 csv(amd)
 }
 }
+\seealso{
+Other convenience functions: 
+\code{\link{mysplit}()}
+}
 \concept{convenience functions}

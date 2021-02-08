@@ -239,6 +239,23 @@ csv <- function(x, name = NULL) {
   utils::write.csv(x, file, row.names = F)
 }
 
+
+#' csv
+#' @description Because I am using split so often, in order to split by
+#'   a single column.
+#' @name mysplit
+#' @param x data frame
+#' @param col column to split by
+#' @family convenience functions
+#' @return list
+#' @examples
+#' mysplit(mtcars, cyl)
+#' @export
+mysplit <- function(x, col) {
+  newcol <- deparse(substitute(col))
+  split(x, x[[newcol]])
+}
+
 #' Probability contours
 #' @description calculates 2d probability contours for use in ggplot2.
 #' Modified from [this post](https://stackoverflow.com/a/59173290/7941188) by user crsh

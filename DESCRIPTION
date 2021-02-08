@@ -8,6 +8,6 @@ Description: Some more or less useful functions which help me in my day to day w
 License: MIT Licence
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Suggests: ggplot2, zoo, lubridate, purrr, timeDate
 Roxygen: list(markdown = TRUE)
