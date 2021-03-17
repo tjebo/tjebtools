@@ -38,7 +38,10 @@ Data frame
 \description{
 The function will anonymize your data
 }
+\seealso{
+https://stackoverflow.com/a/10455729/7941188
+and https://stackoverflow.com/a/10458688/7941188
+}
 \author{
-Modified from \href{https://stackoverflow.com/a/10455729/7941188}{this} and \href{https://stackoverflow.com/a/10458688/7941188}{this}
-post on Stackoverflow from user Etienne Low-Décarie and Gavin Simpson
+Modified from Stackoverflow from user Etienne Low-Décarie and Gavin Simpson
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/tools.R
 \name{mysplit}
 \alias{mysplit}
-\title{csv}
+\title{mysplit}
 \usage{
 mysplit(x, col)
 }

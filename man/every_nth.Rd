@@ -21,6 +21,9 @@ char vector
 \description{
 creates vector with empty lables for custom major/minor ticks
 }
+\seealso{
+https://stackoverflow.com/a/34533473/7941188
+}
 \author{
-SO::adamdsmith
+Stackoverflow user adamdsmith
 }

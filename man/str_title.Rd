@@ -2,7 +2,7 @@
 % Please edit documentation in R/tools.R
 \name{str_title}
 \alias{str_title}
-\title{Title case}
+\title{A title case for AP stylebook}
 \usage{
 str_title(x, strict = FALSE, except = NULL)
 }
@@ -20,13 +20,16 @@ except <- c("and", "or", "nor", "but", "a", "an", "the", "as", "at",
 string
 }
 \description{
-Converting to title case in a clever way
+Converting to title case which should follow the AP stylebook
+in most cases.
 }
 \examples{
 str_title(c("using AIC for model selection"))
 }
 \seealso{
 \link{toupper}
+
+https://en.wikipedia.org/wiki/Title_case
 
 Other convenience functions: 
 \code{\link{csv}()},
