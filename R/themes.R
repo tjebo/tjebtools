@@ -6,9 +6,10 @@
 #' @param base_family base font family
 #' @param base_line_size base size for line elements
 #' @param base_rect_size base size for rect elements
-#'
+#' @import ggplot2
 #' @export
-theme_tjebo <- function (base_size = 10, base_family = "", base_line_size = base_size/30,
+theme_tjebo <- function (base_size = 9, base_family = "",
+                         base_line_size = base_size/30,
                          base_rect_size = base_size/30) {
   theme_bw(base_size = base_size, base_family = base_family,
            base_line_size = base_line_size, base_rect_size = base_rect_size) %+replace%
@@ -21,7 +22,11 @@ theme_tjebo <- function (base_size = 10, base_family = "", base_line_size = base
           legend.background = element_blank(),
           legend.key = element_blank(),
           plot.title = element_text(hjust = 0.5, size = rel(1)),
-          axis.line = element_line(colour = "black", size = rel(1)),
+          axis.line = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title.x = element_text(margin = margin(t = base_size)),
+          axis.title.y = element_text(margin = margin(r = base_size),
+                                     angle = 0, vjust = .5),
           axis.text = element_text(size = rel(0.8)),
           legend.text = element_text(size = rel(0.8)),
           legend.key.size = unit(0.8*base_size,'pt'),
