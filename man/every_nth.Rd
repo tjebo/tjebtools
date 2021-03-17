@@ -6,6 +6,15 @@
 \usage{
 every_nth(x, nth, empty = TRUE, inverse = FALSE)
 }
+\arguments{
+\item{x}{vector}
+
+\item{nth}{how many gaps}
+
+\item{empty}{how to fill}
+
+\item{inverse}{if TRUE removes every nth instead}
+}
 \value{
 char vector
 }

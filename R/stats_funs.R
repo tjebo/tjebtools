@@ -6,7 +6,7 @@
 #' @param y sample two
 #' @param na.rm passed to sd
 #' @importFrom stats sd
-#' @return
+#' @return numeric value
 #' @seealso
 #'   https://stats.stackexchange.com/questions/302445/standard-error-of-difference
 #'   https://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/7-t-tests

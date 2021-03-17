@@ -14,7 +14,7 @@ se_diff_means(x, y, na.rm = TRUE)
 \item{na.rm}{passed to sd}
 }
 \value{
-
+numeric value
 }
 \description{
 The function will compute the standard error of the

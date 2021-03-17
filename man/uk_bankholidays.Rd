@@ -4,14 +4,17 @@
 \alias{uk_bankholidays}
 \title{UK_bankholidays}
 \usage{
-uk_bankholidays(year = getRmetricsOptions("currentYear"))
+uk_bankholidays(year = timeDate::getRmetricsOptions("currentYear"))
+}
+\arguments{
+\item{year}{an integer value or vector of years, formatted as YYYY.}
 }
 \value{
 vector of POSIX.
 }
 \description{
-includes NAMES of bank holidays in output vector
-}
-\author{
-modified function timeDate::holidayLONDON - for description see ?timeDate::holidayLONDON
+modified function timeDate::holidayLONDON -
+for description see ?timeDate::holidayLONDON
+
+includes names of bank holidays in output vector
 }

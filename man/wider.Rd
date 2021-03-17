@@ -4,9 +4,11 @@
 \alias{wider}
 \title{pivoting}
 \usage{
-wider(x, names_from, values_from, ...)
+wider(data, names_from, values_from, ...)
 }
 \arguments{
+\item{data}{A data frame to pivot.}
+
 \item{names_from}{<\code{\link[tidyr:tidyr_tidy_select]{tidy-select}}> A pair of
 arguments describing which column (or columns) to get the name of the
 output column (\code{names_from}), and which column (or columns) to get the

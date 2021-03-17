@@ -24,9 +24,9 @@ in CRAN.
 R and the R version is NOT added to \code{Depends}
 }
 \examples{
+\dontrun{
 show_pkg_versions("qmethod")
 show_pkg_versions("MASS")
-\donttest{
 # assumes you're in a pkg devel dir
 show_pkg_versions()
 }

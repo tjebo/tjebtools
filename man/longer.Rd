@@ -4,9 +4,11 @@
 \alias{longer}
 \title{pivoting}
 \usage{
-longer(x, cols, names_to, values_to, ...)
+longer(data, cols, names_to, values_to, ...)
 }
 \arguments{
+\item{data}{A data frame to pivot.}
+
 \item{cols}{<\code{\link[tidyr:tidyr_tidy_select]{tidy-select}}> Columns to pivot into
 longer format.}
 
