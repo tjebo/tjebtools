@@ -4,10 +4,7 @@
 \alias{show_pkg_versions}
 \title{Show current package dependencies}
 \usage{
-show_pkg_versions(
-  pkg = ".",
-  fields = c("Depends", "Imports", "LinkingTo", "Suggests")
-)
+show_pkg_versions(pkg = ".", fields = NULL)
 }
 \arguments{
 \item{pkg}{package description, can be path or package name}

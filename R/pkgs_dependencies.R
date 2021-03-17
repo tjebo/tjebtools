@@ -20,62 +20,66 @@
 #' @importFrom purrr map
 #' @importFrom dplyr mutate
 #' @importFrom devtools package_file
-#' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #' @seealso https://stackoverflow.com/a/38743324/7941188
 #' @export
-show_pkg_versions <- function(pkg = ".",
-                             fields = c("Depends", "Imports", "LinkingTo", "Suggests")) {
+show_pkg_versions <-
+  function(pkg = ".", fields = NULL) {
+    if (is.null(fields)) fields <- c("Depends", "Imports", "LinkingTo", "Suggests")
+    stopifnot(purrr::is_scalar_character(pkg), pkg != "")
+    fields <- match.arg(fields, c("Depends", "Imports", "LinkingTo", "Suggests"),
+      several.ok = TRUE
+    )
+    avail <- tibble::as_tibble(utils::available.packages())
 
-  stopifnot(purrr::is_scalar_character(pkg), pkg != "")
-  fields <- match.arg(fields, c("Depends", "Imports", "LinkingTo", "Suggests"),
-    several.ok = TRUE
-  )
-
-  avail <- tibble::as_tibble(utils::available.packages())
-
-  if (pkg == ".") {
-    pkg_deps <- unclass(tibble::as_tibble(read.dcf(file.path(devtools::package_file(), "DESCRIPTION"))))
-    pkg <- pkg_deps$Package
-    purrr::map(fields, ~ stringi::stri_split_lines(pkg_deps[[.]])) %>%
-      purrr::map(function(x) {
+    if (pkg == ".") {
+      pkg_deps <-
+        unclass(tibble::as_tibble(read.dcf(file.path(
+          devtools::package_file(),
+          "DESCRIPTION"
+        ))))
+      pkg <- pkg_deps$Package
+      mapped_fields <-
+        purrr::map(fields, function(x) stringi::stri_split_lines(pkg_deps[[x]]))
+      pkg_deps <- purrr::map(mapped_fields, function(x) {
         if (length(x) > 0) {
-          unlist(x) %>%
-            stringi::stri_replace_all_regex(" \\(.*$|,", "") %>%
-            purrr::discard(`%in%`, c("", "R"))
+          x_vec <- unlist(x)
+          x_regex_replaced <- stringi::stri_replace_all_regex(x_vec, " \\(.*$|,", "")
+          purrr::discard(x_regex_replaced, `%in%`, c("", "R"))
         } else {
           x
         }
-      }) -> pkg_deps
-    names(pkg_deps) <- fields
-  } else {
-    pkg_deps <- purrr::map(fields, ~ purrr::flatten_chr((tools::package_dependencies(pkg, which = .))))
-    names(pkg_deps) <- fields
+      })
+      names(pkg_deps) <- fields
+    } else {
+      pkg_deps <-
+        purrr::map(fields, function(x) {
+          purrr::flatten_chr(tools::package_dependencies(pkg, which = x))
+        })
+      names(pkg_deps) <- fields
+    }
+
+    pkg_deps <- purrr::discard(pkg_deps, function(x) {
+      length(x) == 0
+    })
+
+    purrr::map(pkg_deps, function(x) {
+      non_base <- dplyr::filter(avail, .data$Package %in% x)
+      base <- setdiff(x, non_base$Package)
+
+      mutated <- dplyr::mutate(non_base,
+        pv = sprintf("%s (>= %s)", .data$Package, .data$Version)
+      )
+      sel_mutated <- dplyr::select(mutated, "pv")
+      pkg_plus_version <- purrr::flatten_chr(sel_mutated)
+
+      sort(c(pkg_plus_version, base))
+    }) -> pkg_deps
+    cat("Package: ", pkg, "\n", sep = "")
+    purrr::walk(names(pkg_deps), function(x) {
+      cat(x, ":\n", sep = "")
+      sprint_deps <- sprintf("    %s", pkg_deps[[x]])
+      sprint_collapsed <- paste0(sprint_deps, collapse = ",\n")
+      cat(sprint_collapsed)
+    })
   }
-
-  pkg_deps <- purrr::discard(pkg_deps, function(x) {
-    length(x) == 0
-  })
-
-  purrr::map(pkg_deps, function(x) {
-    non_base <- dplyr::filter(avail, Package %in% x)
-    base <- setdiff(x, non_base$Package)
-
-    non_base %>%
-      dplyr::mutate(pv = sprintf("%s (>= %s)", Package, Version)) %>%
-      dplyr::select("pv") %>%
-      purrr::flatten_chr() -> pkg_plus_version
-
-    sort(c(pkg_plus_version, base))
-  }) -> pkg_deps
-
-  cat("Package: ", pkg, "\n", sep = "")
-  purrr::walk(names(pkg_deps), function(x) {
-    cat(x, ":\n", sep = "")
-    sprintf("    %s", pkg_deps[[x]]) %>%
-      paste0(collapse = ",\n") %>%
-      cat()
-    cat("\n")
-  })
-}
- # show_pkg_versions()
