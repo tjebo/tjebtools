@@ -23,6 +23,7 @@ mysplit(mtcars, cyl)
 }
 \seealso{
 Other convenience functions: 
-\code{\link{csv}()}
+\code{\link{csv}()},
+\code{\link{str_title}()}
 }
 \concept{convenience functions}

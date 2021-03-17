@@ -32,7 +32,6 @@ weekly <- function(x, week_end = "sunday", ceiling = TRUE) {
 }
 
 #' UK_bankholidays
-#'
 #' @author  modified function timeDate::holidayLONDON - for description see ?timeDate::holidayLONDON
 #' @description includes NAMES of bank holidays in output vector
 #' @return vector of POSIX.
@@ -140,9 +139,7 @@ uk_bankholidays <- function (year = getRmetricsOptions("currentYear")) {
 
 
 #' every_nth
-#'
 #' @author  SO::adamdsmith
-#'
 #' @description creates vector with empty lables for custom major/minor ticks
 #' @return char vector
 #' @export
@@ -256,62 +253,61 @@ mysplit <- function(x, col) {
   split(x, x[[newcol]])
 }
 
-#' Probability contours
-#' @description calculates 2d probability contours for use in ggplot2.
-#' Modified from [this post](https://stackoverflow.com/a/59173290/7941188) by user crsh
-#' @name prob_contour
-#' @param data data frame x and y coordinates
-#' @param x column with x coordinates (default first column)
-#' @param y column with y coordinates (default second column)
-#' @param prob probability to be estimated
-#' @param n passed to [MASS::kde2d]
-#' @param ... further parameters passed to [MASS::kde2d]
-#' @family stats functions
-#' @export
+#' Title case
+#' @description Converting to title case in a clever way
+#' @name str_title
+#' @param x string to convert to title case
+#' @param strict FALSE: Abbreviations are kept all CAPS -
+#'   in fact, all letters after the first are kept in their original case
+#' @param except Exceptions to be kept in lower case. By default:
+#'    except <- c("and", "or", "nor", "but", "a", "an", "the", "as", "at",
+#'    "by", "for", "in", "of", "on", "per", "to")
+#' @family convenience functions
+#' @seealso [toupper]
+#' @return string
 #' @examples
-#'
-#' library(ggplot2)
-#' set.seed(1)
-#' n=100
-#' foo <- data.frame(x=rnorm(n, 0, 1), y=rnorm(n, 0, 1))
-#'
-#' df_contours <- dplyr::bind_rows(
-#'   purrr::map(seq(0.2, 0.8, 0.2), function(p) prob_contour(foo, prob = p))
-#' )
-#'
-#' ggplot() +
-#'   geom_point(data = foo, aes(x = x, y = y)) +
-#'   geom_polygon(data = df_contours, aes(x = x, y = y, color = prob), fill = NA) +
-#'   scale_color_brewer(name = "Probs", palette = "Set1")
-
-prob_contour <- function(data, x = NULL, y = NULL, n = 50, prob = 0.95, ...) {
-  if (ncol(data) > 2 & missing(x) & missing(y)) {
-    warning("Data frame has more than two columns. Default to first two columns", call. = FALSE)
-  } else if (ncol(data) > 2 & missing(x)) {
-    warning("Data frame has more than two columns and x not specified.
-            Default x to column 1", call. = FALSE)
-  } else if (ncol(data) > 2 & missing(y)) {
-    warning("Data frame has more than two columns and y not specified.
-            Default y to column 2", call. = FALSE)
+#' str_title(c("using AIC for model selection"))
+#' @export
+str_title <- function(x, strict = FALSE, except = NULL) {
+  if (is.null(except)) {
+    except <- c(
+      "and", "or", "nor", "but", "a", "an",
+      "the", "as", "at", "by", "for", "in", "of", "on", "per", "to"
+    )
   }
 
-  if (missing(x)) x <- 1L
-  if (missing(y)) y <- 2L
-
-    post1 <- MASS::kde2d(data[[x]], data[[y]], n = n, ...)
-    dx <- diff(post1$x[1:2])
-    dy <- diff(post1$y[1:2])
-    sz <- sort(post1$z)
-    c1 <- cumsum(sz) * dx * dy
-    levels <- sapply(prob, function(x) {
-      approx(c1, sz, xout = 1 - x)$y
+  cap <- function(s) {
+    paste0(toupper(substring(s, 1, 1)), {
+      s_2plus <- substring(s, 2)
+      if (strict) tolower(s_2plus) else s_2plus
     })
-    df <- as.data.frame(
-      grDevices::contourLines(post1$x, post1$y, post1$z, levels = levels)[[1]])
-    df$x <- round(as.numeric(df$x), 3)
-    df$y <- round(as.numeric(df$y), 3)
-    df$level <- round(as.numeric(df$level), 2)
-    df$prob <- rep(as.character(prob), nrow(df))
-
-    df
   }
+  sapply(x, function(x) {
+    x <- as.character(x)
+    split_s <- unlist(strsplit(x, split = "\\s+"))
+
+    newstring <-
+      sapply(
+        split_s,
+        function(x) {
+          if (x %in% except) {
+            return(x)
+          } else {
+            cap(x)
+          }
+        }
+      )
+    paste(newstring, collapse = " ")
+  }, USE.NAMES = !is.null(names(x)))
+}
+
+#' Pipe operator
+#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+#' @param lhs A value or the magrittr placeholder.
+#' @param rhs A function call using the magrittr semantics.
+#' @return The result of calling `rhs(lhs)`.

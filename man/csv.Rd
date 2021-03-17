@@ -26,6 +26,7 @@ csv(amd)
 }
 \seealso{
 Other convenience functions: 
-\code{\link{mysplit}()}
+\code{\link{mysplit}()},
+\code{\link{str_title}()}
 }
 \concept{convenience functions}
