@@ -8,7 +8,7 @@
 #' @param base_rect_size base size for rect elements
 #' @import ggplot2
 #' @export
-theme_tjebo <- function (base_size = 9, base_family = "",
+theme_tjebo <- function (base_size = 8, base_family = "",
                          base_line_size = base_size/30,
                          base_rect_size = base_size/30) {
   theme_bw(base_size = base_size, base_family = base_family,
@@ -19,16 +19,19 @@ theme_tjebo <- function (base_size = 9, base_family = "",
           panel.grid.minor = element_blank(),
           plot.background = element_blank(),
           strip.background = element_blank(),
+          strip.text = element_text(size = base_size),
           legend.background = element_blank(),
           legend.key = element_blank(),
-          plot.title = element_text(hjust = 0.5, size = rel(1)),
+          plot.title = element_text(hjust = 0.5, size = base_size),
           axis.line = element_blank(),
           axis.ticks = element_blank(),
           axis.title.x = element_text(margin = margin(t = base_size)),
           axis.title.y = element_text(margin = margin(r = base_size),
-                                     angle = 0, vjust = .5),
-          axis.text = element_text(size = rel(0.8)),
-          legend.text = element_text(size = rel(0.8)),
-          legend.key.size = unit(0.8*base_size,'pt'),
+                                     angle = 0,
+                                     vjust = .5,
+                                     hjust = 0),
+          axis.text = element_text(size = base_size),
+          legend.text = element_text(size = base_size),
+          legend.key.size = unit(base_size,'pt'),
           complete = TRUE)
 }

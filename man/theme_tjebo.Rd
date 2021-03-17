@@ -5,7 +5,7 @@
 \title{theme_tjebo}
 \usage{
 theme_tjebo(
-  base_size = 9,
+  base_size = 8,
   base_family = "",
   base_line_size = base_size/30,
   base_rect_size = base_size/30
