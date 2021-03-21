@@ -81,5 +81,6 @@ show_pkg_versions <-
       sprint_deps <- sprintf("    %s", pkg_deps[[x]])
       sprint_collapsed <- paste0(sprint_deps, collapse = ",\n")
       cat(sprint_collapsed)
+      cat("\n")
     })
   }
