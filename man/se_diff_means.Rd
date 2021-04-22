@@ -14,11 +14,12 @@ se_diff_means(x, y, na.rm = TRUE)
 \item{na.rm}{passed to sd}
 }
 \value{
-numeric value
+numeric vector of length 1
 }
 \description{
-The function will compute the standard error of the
-differences of the means between two samples
+The function will compute the pooled standard error of the
+differences of the means between two independent samples,
+with equal variances (!)
 }
 \seealso{
 https://stats.stackexchange.com/questions/302445/standard-error-of-difference
