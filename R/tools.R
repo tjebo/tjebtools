@@ -175,13 +175,44 @@ every_nth <- function(x, nth, empty = TRUE, inverse = FALSE)
   }
 }
 
-#' Pipe operator
-#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
-#' @importFrom magrittr %>%
-#' @usage lhs \%>\% rhs
-#' @param lhs A value or the magrittr placeholder.
-#' @param rhs A function call using the magrittr semantics.
-#' @return The result of calling `rhs(lhs)`.
+#' Partial string matching and replacing
+#' @name match_part
+#' @param x Vector. Values to be matched
+#' @param table Vector. characters to be matched against
+#' @return A list of indices of partial matches
+#' @importFrom stats setNames
+#' @export
+match_part <- function(x, table){
+  lu <- setNames(lapply(table, grep, x = x, ignore.case = TRUE), table)
+  lu
+}
+
+#' Partial string matching and replacing
+#' @rdname match_part
+#' @param x Vector. Values to be matched
+#' @param replace Vector of new labels if a partial match is found.
+#'     If named vector, names are used. If more than one match is found,
+#'     the last match will replace the original value.
+#' @param no_match if there is no partial match
+#' @return Character vector with replaced values
+#' @importFrom utils stack
+#' @examples
+#' oceans <- c("pacific", "atlantic", "indian", "mediterranean")
+#' oceans_long <- c("Eastern Central Atlantic", "Eastern Central Pacific", "Eastern Indian Ocean",
+#'   "Mediterranean and Black Sea", "Northeast Central Atlantic",
+#'   "Northeast Pacific", "Northwest Central Atlantic", "Northwest Pacific",
+#'   "Southeast Central Atlantic", "Southeast Pacific", "Southwest Atlantic",
+#'   "Southwest Pacific", "Western Central Atlantic", "Western Central Pacific",
+#'   "Western Indian Ocean", "World", "Atlantic Pacific")
+#'
+#' match_replace(oceans_long, oceans, "Other")
+#' @export
+match_replace <- function(x, replace, no_match = NA_character_){
+  lu <- stack(match_part(x, replace))
+  x[lu$values] <- as.character(lu$ind)
+  x[-lu$values] <- no_match
+  x
+}
+
+
+
