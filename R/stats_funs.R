@@ -25,7 +25,7 @@ se_diff_means <- function(x, y, na.rm = TRUE) {
 #' @description Gets the standard error of the mean of a sample
 #' @param x sample one
 #' @param na.rm NA removed
-#' @importFrom stats var
+#' @importFrom stats var na.omit
 #' @return numeric vector of length 1
 #' @seealso
 #' https://stackoverflow.com/a/7220087/7941188
